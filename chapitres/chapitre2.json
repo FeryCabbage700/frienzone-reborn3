@@ -1,0 +1,1112 @@
+{
+    "titre": "Chapitre 2 - Les premières impressions",
+    "musique": "chapitre2",
+    "debut": "arriveeEcole",
+
+    "scenes": {
+
+        "arriveeEcole": {
+            "dialogues": [
+                {
+                    "personnage": "narrateur",
+                    "texte": "Le lendemain matin, tu arrives devant l'école."
+                },
+                {
+                    "personnage": "narrateur",
+                    "texte": "Les couloirs te semblent déjà un peu moins inconnus que la veille."
+                },
+                {
+                    "personnage": "narrateur",
+                    "texte": "Tu disposes d'un peu de temps avant le début des cours."
+                }
+            ],
+
+            "choix": [
+                {
+                    "texte": "Chercher Émelyne",
+
+                    "message": {
+                        "personnage": "narrateur",
+                        "texte": "Tu décides de chercher Émelyne avant le début des cours."
+                    },
+
+                    "condition": {
+                        "variable": "rencontreEmelyne",
+                        "operateur": "===",
+                        "valeur": true
+                    },
+
+                    "next": "retrouverEmelyne"
+                },
+
+                {
+                    "texte": "Rejoindre Zoé et Eva",
+
+                    "message": {
+                        "personnage": "narrateur",
+                        "texte": "Tu aperçois Zoé et Eva dans la cour et décides de les rejoindre."
+                    },
+
+                    "condition": {
+                        "variable": "rencontreZoe",
+                        "operateur": "===",
+                        "valeur": true
+                    },
+
+                    "next": "retrouverZoeEva"
+                },
+
+                {
+                    "texte": "Explorer seul l'établissement",
+
+                    "message": {
+                        "personnage": "narrateur",
+                        "texte": "Tu décides de profiter de ce moment pour explorer l'établissement seul."
+                    },
+
+                    "next": "explorationSeule"
+                }
+            ]
+        },
+
+        "retrouverEmelyne": {
+            "dialogues": [
+                {
+                    "personnage": "narrateur",
+                    "texte": "Tu retrouves Émelyne devant le CDI."
+                },
+                {
+                    "personnage": "emelyne",
+                    "texte": "Salut."
+                },
+                {
+                    "personnage": "emelyne",
+                    "texte": "Tu ne t'es pas perdu depuis hier ?"
+                },
+                {
+                    "personnage": "narrateur",
+                    "texte": "Son ton est sérieux, mais tu remarques une légère pointe d'humour."
+                }
+            ],
+
+            "choix": [
+                {
+                    "texte": "La remercier pour son aide de la veille",
+
+                    "message": {
+                        "personnage": "joueur",
+                        "texte": "Non, grâce à ta visite, j'ai réussi à me repérer."
+                    },
+
+                    "effet": {
+                        "relationEmelyne": 3,
+                        "confianceEmelyne": 2
+                    },
+
+                    "next": "discussionEmelyneCDI"
+                },
+
+                {
+                    "texte": "Faire une plaisanterie",
+
+                    "message": {
+                        "personnage": "joueur",
+                        "texte": "Je me suis seulement trompé de couloir deux fois. C'est déjà un progrès."
+                    },
+
+                    "effet": {
+                        "relationEmelyne": 2,
+                        "humour": 1
+                    },
+
+                    "next": "discussionEmelyneCDI"
+                }
+            ]
+        },
+
+        "discussionEmelyneCDI": {
+            "dialogues": [
+                {
+                    "personnage": "emelyne",
+                    "texte": "Je viens souvent ici avant les cours."
+                },
+                {
+                    "personnage": "emelyne",
+                    "texte": "C'est plus calme que la cour."
+                },
+                {
+                    "personnage": "narrateur",
+                    "texte": "Émelyne tient plusieurs livres contre elle."
+                },
+                {
+                    "personnage": "narrateur",
+                    "texte": "Tu comprends qu'elle accorde beaucoup d'importance à ses études."
+                }
+            ],
+
+            "choix": [
+                {
+                    "texte": "Lui demander ce qu'elle lit",
+
+                    "message": {
+                        "personnage": "joueur",
+                        "texte": "Tu lis quoi en ce moment ?"
+                    },
+
+                    "effet": {
+                        "confianceEmelyne": 3
+                    },
+
+                    "next": "lectureEmelyne"
+                },
+
+                {
+                    "texte": "Lui demander pourquoi elle travaille autant",
+
+                    "message": {
+                        "personnage": "joueur",
+                        "texte": "Tu as l'air de beaucoup travailler. Tu as un objectif particulier ?"
+                    },
+
+                    "effet": {
+                        "relationEmelyne": 2
+                    },
+
+                    "next": "objectifEmelyne"
+                }
+            ]
+        },
+
+        "lectureEmelyne": {
+            "dialogues": [
+                {
+                    "personnage": "emelyne",
+                    "texte": "Un roman historique."
+                },
+                {
+                    "personnage": "emelyne",
+                    "texte": "J'aime bien comprendre comment les gens vivaient avant."
+                },
+                {
+                    "personnage": "narrateur",
+                    "texte": "Elle parle un peu plus facilement de ses lectures que d'elle-même."
+                }
+            ],
+
+            "choix": [
+                {
+                    "texte": "Continuer vers le cours",
+
+                    "message": {
+                        "personnage": "narrateur",
+                        "texte": "La sonnerie retentit et vous vous dirigez ensemble vers les salles de cours."
+                    },
+
+                    "next": "couloirBryan"
+                }
+            ]
+        },
+
+        "objectifEmelyne": {
+            "dialogues": [
+                {
+                    "personnage": "emelyne",
+                    "texte": "J'aimerais avoir suffisamment de choix pour la suite."
+                },
+                {
+                    "personnage": "emelyne",
+                    "texte": "Je préfère travailler maintenant plutôt que regretter plus tard."
+                },
+                {
+                    "personnage": "narrateur",
+                    "texte": "Sa réponse est méthodique, mais semble aussi cacher une certaine pression."
+                }
+            ],
+
+            "choix": [
+                {
+                    "texte": "L'encourager",
+
+                    "message": {
+                        "personnage": "joueur",
+                        "texte": "Tu as l'air déterminée. Je pense que tu y arriveras."
+                    },
+
+                    "effet": {
+                        "relationEmelyne": 3,
+                        "confianceEmelyne": 2
+                    },
+
+                    "next": "couloirBryan"
+                }
+            ]
+        },
+
+        "retrouverZoeEva": {
+            "dialogues": [
+                {
+                    "personnage": "narrateur",
+                    "texte": "Zoé t'aperçoit et te fait immédiatement un grand signe."
+                },
+                {
+                    "personnage": "zoe",
+                    "texte": "Hé, le nouveau !"
+                },
+                {
+                    "personnage": "eva",
+                    "texte": "Tu n'es pas obligée de crier."
+                },
+                {
+                    "personnage": "zoe",
+                    "texte": "Sinon, il ne nous aurait peut-être pas vues."
+                }
+            ],
+
+            "choix": [
+                {
+                    "texte": "Saluer Zoé avec enthousiasme",
+
+                    "message": {
+                        "personnage": "joueur",
+                        "texte": "Salut Zoé. Je crois que toute l'école vient aussi de t'entendre."
+                    },
+
+                    "effet": {
+                        "relationZoe": 4,
+                        "humour": 1,
+                        "relationEva": 1
+                    },
+
+                    "next": "discussionZoeCour"
+                },
+
+                {
+                    "texte": "Saluer Eva et Zoé calmement",
+
+                    "message": {
+                        "personnage": "joueur",
+                        "texte": "Salut, vous deux."
+                    },
+
+                    "effet": {
+                        "relationEva": 2,
+                        "relationZoe": 2
+                    },
+
+                    "next": "discussionZoeCour"
+                }
+            ]
+        },
+
+        "discussionZoeCour": {
+            "dialogues": [
+                {
+                    "personnage": "zoe",
+                    "texte": "Alors, cette première journée ?"
+                },
+                {
+                    "personnage": "zoe",
+                    "texte": "Tu as survécu ?"
+                },
+                {
+                    "personnage": "eva",
+                    "texte": "Il est toujours là, donc probablement."
+                },
+                {
+                    "personnage": "narrateur",
+                    "texte": "Zoé semble toujours aussi énergique."
+                }
+            ],
+
+            "choix": [
+                {
+                    "texte": "Lui demander pourquoi elle connaît tout le monde",
+
+                    "message": {
+                        "personnage": "joueur",
+                        "texte": "Comment tu fais pour connaître autant de monde ici ?"
+                    },
+
+                    "effet": {
+                        "relationZoe": 2
+                    },
+
+                    "next": "populariteZoe"
+                },
+
+                {
+                    "texte": "Demander à Eva comment s'est terminée sa journée",
+
+                    "message": {
+                        "personnage": "joueur",
+                        "texte": "Et toi, Eva ? Ta journée s'est bien terminée hier ?"
+                    },
+
+                    "effet": {
+                        "relationEva": 3,
+                        "confianceEva": 1
+                    },
+
+                    "next": "discussionEvaCour"
+                }
+            ]
+        },
+
+        "populariteZoe": {
+            "dialogues": [
+                {
+                    "personnage": "zoe",
+                    "texte": "Je parle simplement aux gens."
+                },
+                {
+                    "personnage": "zoe",
+                    "texte": "Même quand ils n'ont pas forcément envie."
+                },
+                {
+                    "personnage": "eva",
+                    "texte": "Surtout quand ils n'ont pas envie."
+                },
+                {
+                    "personnage": "narrateur",
+                    "texte": "Zoé rit sans sembler vexée."
+                }
+            ],
+
+            "choix": [
+                {
+                    "texte": "Continuer vers le cours",
+
+                    "message": {
+                        "personnage": "narrateur",
+                        "texte": "La sonnerie vous oblige à interrompre la conversation."
+                    },
+
+                    "next": "couloirBryan"
+                }
+            ]
+        },
+
+        "discussionEvaCour": {
+            "dialogues": [
+                {
+                    "personnage": "eva",
+                    "texte": "Oui, plutôt bien."
+                },
+                {
+                    "personnage": "eva",
+                    "texte": "C'était une journée normale."
+                },
+                {
+                    "personnage": "narrateur",
+                    "texte": "Comme la veille, Eva reste assez vague lorsqu'elle parle d'elle-même."
+                }
+            ],
+
+            "choix": [
+                {
+                    "texte": "Ne pas insister",
+
+                    "message": {
+                        "personnage": "joueur",
+                        "texte": "Tant mieux."
+                    },
+
+                    "effet": {
+                        "confianceEva": 2
+                    },
+
+                    "next": "couloirBryan"
+                },
+
+                {
+                    "texte": "Lui demander ce qu'elle appelle une journée normale",
+
+                    "message": {
+                        "personnage": "joueur",
+                        "texte": "Et c'est quoi, une journée normale pour toi ?"
+                    },
+
+                    "effet": {
+                        "relationEva": 1
+                    },
+
+                    "next": "evaEvasiveMatin"
+                }
+            ]
+        },
+
+        "evaEvasiveMatin": {
+            "dialogues": [
+                {
+                    "personnage": "eva",
+                    "texte": "Les cours, mes amis, puis je rentre chez moi."
+                },
+                {
+                    "personnage": "eva",
+                    "texte": "Rien de très particulier."
+                },
+                {
+                    "personnage": "narrateur",
+                    "texte": "Tu comprends qu'elle ne souhaite pas encore développer davantage."
+                }
+            ],
+
+            "choix": [
+                {
+                    "texte": "Rejoindre les salles de cours",
+
+                    "message": {
+                        "personnage": "narrateur",
+                        "texte": "Vous vous dirigez vers les bâtiments avant que la sonnerie ne retentisse."
+                    },
+
+                    "next": "couloirBryan"
+                }
+            ]
+        },
+
+        "explorationSeule": {
+            "dialogues": [
+                {
+                    "personnage": "narrateur",
+                    "texte": "Tu avances seul dans un couloir encore peu fréquenté."
+                },
+                {
+                    "personnage": "narrateur",
+                    "texte": "En cherchant ta salle, tu remarques un élève plus âgé qui aide deux nouveaux à se repérer."
+                },
+                {
+                    "personnage": "narrateur",
+                    "texte": "Après leur départ, il se tourne vers toi."
+                }
+            ],
+
+            "choix": [
+                {
+                    "texte": "Lui demander ton chemin",
+
+                    "message": {
+                        "personnage": "joueur",
+                        "texte": "Salut. Tu saurais où se trouve la salle 214 ?"
+                    },
+
+                    "next": "rencontreBryan"
+                },
+
+                {
+                    "texte": "Continuer sans rien demander",
+
+                    "message": {
+                        "personnage": "narrateur",
+                        "texte": "Tu continues à chercher ta salle sans lui demander son aide."
+                    },
+
+                    "next": "bryanIntervient"
+                }
+            ]
+        },
+
+        "bryanIntervient": {
+            "dialogues": [
+                {
+                    "personnage": "narrateur",
+                    "texte": "Après quelques pas, tu réalises que tu viens de revenir exactement au même endroit."
+                },
+                {
+                    "personnage": "bryan",
+                    "texte": "Tu cherches quelque chose ?"
+                }
+            ],
+
+            "choix": [
+                {
+                    "texte": "Reconnaître que tu es perdu",
+
+                    "message": {
+                        "personnage": "joueur",
+                        "texte": "Oui. Je cherche la salle 214."
+                    },
+
+                    "next": "rencontreBryan"
+                }
+            ]
+        },
+
+        "couloirBryan": {
+            "dialogues": [
+                {
+                    "personnage": "narrateur",
+                    "texte": "Dans le couloir, un élève plus âgé s'arrête près de vous."
+                },
+                {
+                    "personnage": "bryan",
+                    "texte": "Salut."
+                },
+                {
+                    "personnage": "bryan",
+                    "texte": "Tu dois être le nouveau."
+                }
+            ],
+
+            "choix": [
+                {
+                    "texte": "Te présenter",
+
+                    "message": {
+                        "personnage": "joueur",
+                        "texte": "Oui. Je viens d'arriver cette semaine."
+                    },
+
+                    "next": "rencontreBryan"
+                }
+            ]
+        },
+
+        "rencontreBryan": {
+            "dialogues": [
+                {
+                    "personnage": "bryan",
+                    "texte": "Je m'appelle Bryan."
+                },
+                {
+                    "personnage": "bryan",
+                    "texte": "Si tu cherches une salle ou un professeur, tu peux me demander."
+                },
+                {
+                    "personnage": "narrateur",
+                    "texte": "Bryan semble calme et habitué à aider les autres élèves."
+                }
+            ],
+
+            "choix": [
+                {
+                    "texte": "Le remercier",
+
+                    "message": {
+                        "personnage": "joueur",
+                        "texte": "Merci. C'est sympa."
+                    },
+
+                    "effet": {
+                        "relationBryan": 3,
+                        "confianceBryan": 2,
+                        "rencontreBryan": true
+                    },
+
+                    "next": "activiteGroupe"
+                },
+
+                {
+                    "texte": "Rester méfiant",
+
+                    "message": {
+                        "personnage": "joueur",
+                        "texte": "D'accord. Je m'en souviendrai."
+                    },
+
+                    "effet": {
+                        "relationBryan": 1,
+                        "rencontreBryan": true
+                    },
+
+                    "next": "activiteGroupe"
+                }
+            ]
+        },
+
+        "activiteGroupe": {
+            "dialogues": [
+                {
+                    "personnage": "narrateur",
+                    "texte": "Un peu plus tard, votre professeur annonce une activité de groupe."
+                },
+                {
+                    "personnage": "narrateur",
+                    "texte": "Tu te retrouves avec Eva, Bryan et un autre personnage rencontré la veille."
+                },
+                {
+                    "personnage": "bryan",
+                    "texte": "On devrait commencer par répartir les tâches."
+                },
+                {
+                    "personnage": "eva",
+                    "texte": "Ça évitera de perdre du temps."
+                }
+            ],
+
+            "choix": [
+                {
+                    "texte": "Proposer une organisation",
+
+                    "message": {
+                        "personnage": "joueur",
+                        "texte": "On peut chacun préparer une partie, puis tout relire ensemble."
+                    },
+
+                    "effet": {
+                        "confianceEva": 2,
+                        "confianceBryan": 2
+                    },
+
+                    "next": "travailGroupe"
+                },
+
+                {
+                    "texte": "Laisser Bryan organiser le groupe",
+
+                    "message": {
+                        "personnage": "joueur",
+                        "texte": "Je te laisse nous organiser, Bryan."
+                    },
+
+                    "effet": {
+                        "relationBryan": 2
+                    },
+
+                    "next": "travailGroupe"
+                }
+            ]
+        },
+
+        "travailGroupe": {
+            "dialogues": [
+                {
+                    "personnage": "narrateur",
+                    "texte": "Le groupe commence à travailler."
+                },
+                {
+                    "personnage": "narrateur",
+                    "texte": "Bryan se montre sérieux et efficace."
+                },
+                {
+                    "personnage": "narrateur",
+                    "texte": "Après quelques minutes, un élève du groupe voisin s'approche."
+                },
+                {
+                    "personnage": "eleve",
+                    "texte": "Bryan, tu as encore copié les réponses du corrigé ?"
+                },
+                {
+                    "personnage": "narrateur",
+                    "texte": "Le ton de l'élève attire l'attention de plusieurs personnes."
+                }
+            ],
+
+            "choix": [
+                {
+                    "texte": "Défendre Bryan",
+
+                    "message": {
+                        "personnage": "joueur",
+                        "texte": "Il travaille avec nous depuis le début. Il n'a rien copié."
+                    },
+
+                    "effet": {
+                        "confianceBryan": 5,
+                        "relationBryan": 3,
+                        "confianceEva": 3,
+                        "courage": 2
+                    },
+
+                    "next": "defenseBryan"
+                },
+
+                {
+                    "texte": "Attendre d'en savoir plus",
+
+                    "message": {
+                        "personnage": "narrateur",
+                        "texte": "Tu préfères attendre d'avoir davantage d'informations avant de réagir."
+                    },
+
+                    "effet": {
+                        "confianceEva": 1
+                    },
+
+                    "next": "attenteAccusation"
+                },
+
+                {
+                    "texte": "Demander à Bryan de s'expliquer",
+
+                    "message": {
+                        "personnage": "joueur",
+                        "texte": "Bryan, tu peux expliquer ce qui s'est passé ?"
+                    },
+
+                    "effet": {
+                        "relationBryan": 1,
+                        "confianceEva": 1
+                    },
+
+                    "next": "explicationBryan"
+                }
+            ]
+        },
+
+        "defenseBryan": {
+            "dialogues": [
+                {
+                    "personnage": "bryan",
+                    "texte": "Merci."
+                },
+                {
+                    "personnage": "eva",
+                    "texte": "Il était avec nous pendant tout le travail."
+                },
+                {
+                    "personnage": "narrateur",
+                    "texte": "Le professeur vérifie les documents de Bryan."
+                },
+                {
+                    "personnage": "narrateur",
+                    "texte": "Il confirme rapidement que l'accusation était fausse."
+                }
+            ],
+
+            "choix": [
+                {
+                    "texte": "Reprendre le travail",
+
+                    "message": {
+                        "personnage": "narrateur",
+                        "texte": "Le groupe reprend le travail après cet incident."
+                    },
+
+                    "next": "discussionEvaApresIncident"
+                }
+            ]
+        },
+
+        "attenteAccusation": {
+            "dialogues": [
+                {
+                    "personnage": "narrateur",
+                    "texte": "Le professeur examine les documents utilisés par Bryan."
+                },
+                {
+                    "personnage": "narrateur",
+                    "texte": "Il confirme que Bryan n'a utilisé aucun corrigé."
+                },
+                {
+                    "personnage": "bryan",
+                    "texte": "Voilà."
+                },
+                {
+                    "personnage": "narrateur",
+                    "texte": "Bryan reste calme, mais semble légèrement affecté par l'accusation."
+                }
+            ],
+
+            "choix": [
+                {
+                    "texte": "T'excuser de ne pas avoir réagi",
+
+                    "message": {
+                        "personnage": "joueur",
+                        "texte": "Désolé. Je ne savais pas quoi penser."
+                    },
+
+                    "effet": {
+                        "confianceBryan": 2
+                    },
+
+                    "next": "discussionEvaApresIncident"
+                }
+            ]
+        },
+
+        "explicationBryan": {
+            "dialogues": [
+                {
+                    "personnage": "bryan",
+                    "texte": "J'ai préparé cette partie hier soir."
+                },
+                {
+                    "personnage": "bryan",
+                    "texte": "Le professeur peut vérifier mon brouillon."
+                },
+                {
+                    "personnage": "narrateur",
+                    "texte": "Le brouillon confirme rapidement sa version."
+                }
+            ],
+
+            "choix": [
+                {
+                    "texte": "Reconnaître qu'il disait vrai",
+
+                    "message": {
+                        "personnage": "joueur",
+                        "texte": "D'accord. Tu avais raison."
+                    },
+
+                    "effet": {
+                        "confianceBryan": 2
+                    },
+
+                    "next": "discussionEvaApresIncident"
+                }
+            ]
+        },
+
+        "discussionEvaApresIncident": {
+            "dialogues": [
+                {
+                    "personnage": "narrateur",
+                    "texte": "Après le cours, Eva te rejoint dans le couloir."
+                },
+                {
+                    "personnage": "eva",
+                    "texte": "Tu as réagi différemment de beaucoup de personnes."
+                },
+                {
+                    "personnage": "eva",
+                    "texte": "Pourquoi ?"
+                }
+            ],
+
+            "choix": [
+                {
+                    "texte": "Dire que l'accusation semblait injuste",
+
+                    "message": {
+                        "personnage": "joueur",
+                        "texte": "Parce que l'accusation semblait injuste. Il fallait au moins vérifier."
+                    },
+
+                    "effet": {
+                        "confianceEva": 4,
+                        "relationEva": 2
+                    },
+
+                    "next": "evaComprend"
+                },
+
+                {
+                    "texte": "Dire que tu voulais aider Bryan",
+
+                    "message": {
+                        "personnage": "joueur",
+                        "texte": "Bryan m'a aidé plus tôt. Je ne voulais pas le laisser seul face à cette accusation."
+                    },
+
+                    "effet": {
+                        "relationEva": 3,
+                        "confianceEva": 3
+                    },
+
+                    "next": "evaComprend"
+                },
+
+                {
+                    "texte": "Dire que tu n'avais pas vraiment réfléchi",
+
+                    "message": {
+                        "personnage": "joueur",
+                        "texte": "Je n'ai pas vraiment réfléchi. J'ai simplement réagi."
+                    },
+
+                    "effet": {
+                        "relationEva": 1
+                    },
+
+                    "next": "evaComprend"
+                }
+            ]
+        },
+
+        "evaComprend": {
+            "dialogues": [
+                {
+                    "personnage": "eva",
+                    "texte": "Je vois."
+                },
+                {
+                    "personnage": "eva",
+                    "texte": "Au moins, tu ne juges pas les gens trop rapidement."
+                },
+                {
+                    "personnage": "narrateur",
+                    "texte": "Eva semble réfléchir pendant quelques secondes."
+                }
+            ],
+
+            "choix": [
+                {
+                    "texte": "Continuer vers la sortie",
+
+                    "message": {
+                        "personnage": "narrateur",
+                        "texte": "Vous continuez à marcher ensemble vers la sortie de l'établissement."
+                    },
+
+                    "next": "finJourneeChapitre2"
+                }
+            ]
+        },
+
+        "finJourneeChapitre2": {
+            "dialogues": [
+                {
+                    "personnage": "narrateur",
+                    "texte": "La journée se termine."
+                },
+                {
+                    "personnage": "zoe",
+                    "texte": "On devrait créer un groupe de discussion pour les prochains travaux."
+                },
+                {
+                    "personnage": "bryan",
+                    "texte": "Ce serait plus simple."
+                },
+                {
+                    "personnage": "eva",
+                    "texte": "Oui, pourquoi pas."
+                }
+            ],
+
+            "choix": [
+                {
+                    "texte": "Accepter l'idée du groupe",
+
+                    "message": {
+                        "personnage": "joueur",
+                        "texte": "Bonne idée. Ça sera plus pratique pour s'organiser."
+                    },
+
+                    "effet": {
+                        "relationEva": 2,
+                        "relationBryan": 1,
+                        "relationZoe": 1
+                    },
+
+                    "next": "evaDonneNumero"
+                },
+
+                {
+                    "texte": "Dire que personne n'est obligé",
+
+                    "message": {
+                        "personnage": "joueur",
+                        "texte": "Ça me va, tant que personne ne se sent obligé."
+                    },
+
+                    "effet": {
+                        "confianceEva": 3
+                    },
+
+                    "next": "evaDonneNumero"
+                }
+            ]
+        },
+
+        "evaDonneNumero": {
+            "dialogues": [
+                {
+                    "personnage": "narrateur",
+                    "texte": "Les autres commencent à s'éloigner."
+                },
+                {
+                    "personnage": "narrateur",
+                    "texte": "Eva te rattrape avant que tu ne quittes l'établissement."
+                },
+                {
+                    "personnage": "eva",
+                    "texte": "Attends."
+                },
+                {
+                    "personnage": "eva",
+                    "texte": "Pour le groupe de discussion..."
+                },
+                {
+                    "personnage": "eva",
+                    "texte": "Et aussi si tu as besoin d'aide pour les cours."
+                },
+                {
+                    "personnage": "eva",
+                    "texte": "Tu peux enregistrer mon numéro."
+                }
+            ],
+
+            "choix": [
+                {
+                    "texte": "Enregistrer son numéro",
+
+                    "message": {
+                        "personnage": "joueur",
+                        "texte": "Merci. Je t'envoie un message pour que tu aies aussi le mien."
+                    },
+
+                    "effet": {
+                        "numeroEva": true,
+                        "relationEva": 3,
+                        "confianceEva": 3
+                    },
+
+                    "next": "numeroEvaObtenu"
+                }
+            ]
+        },
+
+        "numeroEvaObtenu": {
+            "dialogues": [
+                {
+                    "personnage": "systeme",
+                    "texte": "Numéro d'Eva obtenu."
+                },
+                {
+                    "personnage": "eva",
+                    "texte": "Voilà. Maintenant, tu l'as."
+                },
+                {
+                    "personnage": "eva",
+                    "texte": "À demain."
+                },
+                {
+                    "personnage": "narrateur",
+                    "texte": "Eva rejoint ensuite Zoé et Bryan."
+                },
+                {
+                    "personnage": "narrateur",
+                    "texte": "Tu quittes l'école avec le sentiment d'avoir franchi une nouvelle étape."
+                }
+            ],
+
+            "choix": [
+                {
+                    "texte": "Terminer le chapitre",
+
+                    "message": {
+                        "personnage": "narrateur",
+                        "texte": "Cette deuxième journée se termine avec un nouveau contact enregistré dans ton téléphone."
+                    },
+
+                    "next": "finChapitre2"
+                }
+            ]
+        },
+
+        "finChapitre2": {
+            "dialogues": [
+                {
+                    "personnage": "narrateur",
+                    "texte": "Chapitre 2 terminé."
+                }
+            ],
+
+            "choix": [
+                {
+                    "texte": "Retourner au menu principal",
+
+                    "message": {
+                        "personnage": "narrateur",
+                        "texte": "La suite de l'histoire sera bientôt disponible."
+                    },
+
+                    "next": "chapitre3"
+                }
+            ]
+        }
+    }
+}

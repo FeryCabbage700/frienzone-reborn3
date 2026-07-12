@@ -1,0 +1,301 @@
+/* ==========================================
+   FRIENDZONÉ REBORN
+   dialogue.css
+========================================== */
+
+/* Zone contenant toute la conversation */
+
+#conversation{
+
+    display:flex;
+    flex-direction:column;
+
+    gap:18px;
+
+    padding:25px;
+
+    overflow-y:auto;
+
+}
+
+
+
+/* Message */
+
+.message{
+
+    display:flex;
+
+    flex-direction:column;
+
+    max-width:75%;
+
+}
+
+
+
+/* Nom du personnage */
+
+.nom{
+
+    font-size:13px;
+
+    margin-bottom:5px;
+
+    color:#999;
+
+    font-weight:bold;
+
+}
+
+
+
+/* Bulle */
+
+.bulle{
+
+    padding:14px 18px;
+
+    border-radius:18px;
+
+    line-height:1.6;
+
+    word-break:break-word;
+
+    font-size:17px;
+
+}
+
+
+
+/* ==========================================
+   Joueur
+========================================== */
+
+.joueur{
+
+    align-self:flex-end;
+
+}
+
+.joueur .bulle{
+
+    background:#2f80ed;
+
+    color:white;
+
+    border-bottom-right-radius:6px;
+
+}
+
+.joueur .nom{
+
+    text-align:right;
+
+}
+
+
+
+/* ==========================================
+   Eva
+========================================== */
+
+.eva{
+
+    align-self:flex-start;
+
+}
+
+.eva .bulle{
+
+    background:#ff7eb6;
+
+    color:white;
+
+    border-bottom-left-radius:6px;
+
+}
+
+
+
+/* ==========================================
+   Zoé
+========================================== */
+
+.zoe{
+
+    align-self:flex-start;
+
+}
+
+.zoe .bulle{
+
+    background:#f39c12;
+
+    color:white;
+
+    border-bottom-left-radius:6px;
+
+}
+
+
+
+/* ==========================================
+   Émelyne
+========================================== */
+
+.emelyne{
+
+    align-self:flex-start;
+
+}
+
+.emelyne .bulle{
+
+    background:#2ecc71;
+
+    color:white;
+
+    border-bottom-left-radius:6px;
+
+}
+
+
+
+/* ==========================================
+   Narration
+========================================== */
+
+.narration{
+
+    align-self:center;
+
+    max-width:90%;
+
+}
+
+.narration .bulle{
+
+    background:rgba(255,255,255,.08);
+
+    color:#dddddd;
+
+    border-radius:10px;
+
+    text-align:center;
+
+    font-style:italic;
+
+}
+
+
+
+/* ==========================================
+   Pensée du joueur
+========================================== */
+
+.pensee{
+
+    align-self:center;
+
+}
+
+.pensee .bulle{
+
+    background:rgba(255,255,255,.05);
+
+    color:#bdbdbd;
+
+    border-left:4px solid #999;
+
+    font-style:italic;
+
+}
+
+
+
+/* ==========================================
+   Heure
+========================================== */
+
+.heure{
+
+    margin-top:5px;
+
+    font-size:11px;
+
+    color:#888;
+
+}
+
+.joueur .heure{
+
+    text-align:right;
+
+}
+
+
+
+/* ==========================================
+   Avatar (facultatif)
+========================================== */
+
+.ligne{
+
+    display:flex;
+
+    align-items:flex-end;
+
+    gap:10px;
+
+}
+
+.avatar{
+
+    width:48px;
+
+    height:48px;
+
+    border-radius:50%;
+
+    object-fit:cover;
+
+    flex-shrink:0;
+
+}
+
+
+
+/* ==========================================
+   Scroll
+========================================== */
+
+#conversation::-webkit-scrollbar{
+
+    width:8px;
+
+}
+
+#conversation::-webkit-scrollbar-thumb{
+
+    background:#444;
+
+    border-radius:20px;
+
+}
+
+
+
+/* ==========================================
+   Responsive
+========================================== */
+
+@media(max-width:800px){
+
+    .message{
+
+        max-width:90%;
+
+    }
+
+}

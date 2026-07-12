@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Friendzoné Reborn</title>
+
+    <link
+        rel="stylesheet"
+        href="css/style.css"
+    >
+
+    <link
+        rel="stylesheet"
+        href="css/dialogue.css"
+    >
+
+    <link
+        rel="stylesheet"
+        href="css/choix.css"
+    >
+
+    <link
+        rel="stylesheet"
+        href="css/animations.css"
+    >
+
+</head>
+
+<body>
+
+    <!-- Transition noire au chargement -->
+
+    <div
+        id="transition"
+        class="actif"
+    ></div>
+
+
+    <!-- Conteneur principal du jeu -->
+
+    <div id="jeu">
+
+
+        <!-- Barre supérieure -->
+
+        <header id="entete">
+
+            <button
+                id="retourMenu"
+                type="button"
+                aria-label="Retourner au menu principal"
+            >
+                ← Menu
+            </button>
+
+            <div id="titre">
+                Chargement du chapitre...
+            </div>
+
+            <button
+                id="ouvrirParametres"
+                type="button"
+                aria-label="Ouvrir les paramètres"
+            >
+                ⚙
+            </button>
+
+        </header>
+
+
+        <!-- Zone de conversation -->
+
+        <main
+            id="conversation"
+            aria-live="polite"
+        >
+
+            <div id="texte">
+
+                <!--
+                    Les bulles de dialogue seront
+                    ajoutées ici par dialogue.js
+                -->
+
+            </div>
+
+        </main>
+
+
+        <!-- Popup contenant les choix -->
+
+        <div
+            id="popupChoix"
+            class="popup-choix"
+            aria-hidden="true"
+        >
+
+            <div
+                class="popup-choix-contenu"
+                role="dialog"
+                aria-modal="true"
+                aria-labelledby="titreChoix"
+            >
+
+                <h2 id="titreChoix">
+                    Que veux-tu faire ?
+                </h2>
+
+                <div id="choix">
+
+                    <!--
+                        Les boutons seront ajoutés ici
+                        par choix.js
+                    -->
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- Popup des paramètres -->
+
+        <div
+            id="popupParametres"
+            class="popup-parametres"
+            aria-hidden="true"
+        >
+
+            <div
+                class="popup-parametres-contenu"
+                role="dialog"
+                aria-modal="true"
+                aria-labelledby="titreParametres"
+            >
+
+                <h2 id="titreParametres">
+                    Paramètres
+                </h2>
+
+
+                <label for="volumeMusique">
+
+                    Volume de la musique
+
+                </label>
+
+                <input
+                    id="volumeMusique"
+                    type="range"
+                    min="0"
+                    max="1"
+                    step="0.05"
+                    value="0.4"
+                >
+
+
+                <label for="volumeAmbiance">
+
+                    Volume de l'ambiance
+
+                </label>
+
+                <input
+                    id="volumeAmbiance"
+                    type="range"
+                    min="0"
+                    max="1"
+                    step="0.05"
+                    value="0.25"
+                >
+
+
+                <label for="volumeEffets">
+
+                    Volume des effets
+
+                </label>
+
+                <input
+                    id="volumeEffets"
+                    type="range"
+                    min="0"
+                    max="1"
+                    step="0.05"
+                    value="0.7"
+                >
+
+
+                <button
+                    id="fermerParametres"
+                    type="button"
+                >
+                    Fermer
+                </button>
+
+            </div>
+
+        </div>
+
+
+    </div>
+
+
+    <!-- Scripts : ordre important -->
+
+    <script src="js/audiomanager.js"></script>
+
+    <script src="js/animation.js"></script>
+
+    <script src="js/sauvegarde.js"></script>
+
+    <script src="js/chapitres.js"></script>
+
+    <script src="js/conditions.js"></script>
+
+    <script src="js/dialogue.js"></script>
+
+    <script src="js/choix.js"></script>
+
+    <script src="js/moteur.js"></script>
+
+
+    <!-- Gestion simple du menu et des paramètres -->
+
+    <script>
+
+        "use strict";
+
+
+        const boutonRetourMenu =
+            document.getElementById(
+                "retourMenu"
+            );
+
+
+        const boutonOuvrirParametres =
+            document.getElementById(
+                "ouvrirParametres"
+            );
+
+
+        const boutonFermerParametres =
+            document.getElementById(
+                "fermerParametres"
+            );
+
+
+        const popupParametres =
+            document.getElementById(
+                "popupParametres"
+            );
+
+
+        const volumeMusique =
+            document.getElementById(
+                "volumeMusique"
+            );
+
+
+        const volumeAmbiance =
+            document.getElementById(
+                "volumeAmbiance"
+            );
+
+
+        const volumeEffets =
+            document.getElementById(
+                "volumeEffets"
+            );
+
+
+        boutonRetourMenu
+            .addEventListener(
+                "click",
+                () => {
+
+                    const confirmation =
+                        confirm(
+                            "Retourner au menu principal ?"
+                        );
+
+                    if (!confirmation) {
+
+                        return;
+
+                    }
+
+
+                    if (
+                        typeof moteur !==
+                        "undefined"
+                    ) {
+
+                        moteur.sauvegarder();
+
+                    }
+
+
+                    if (
+                        typeof audioManager !==
+                        "undefined"
+                    ) {
+
+                        audioManager.fadeOut(
+                            800
+                        );
+
+                        audioManager
+                            .arreterAmbiance();
+
+                    }
+
+
+                    if (
+                        typeof animationManager !==
+                        "undefined"
+                    ) {
+
+                        animationManager
+                            .transitionVersNoir(
+                                () => {
+
+                                    window.location.href =
+                                        "index.html";
+
+                                }
+                            );
+
+                        return;
+
+                    }
+
+
+                    window.location.href =
+                        "index.html";
+
+                }
+            );
+
+
+        boutonOuvrirParametres
+            .addEventListener(
+                "click",
+                () => {
+
+                    popupParametres
+                        .classList.add(
+                            "ouverte"
+                        );
+
+                    popupParametres
+                        .setAttribute(
+                            "aria-hidden",
+                            "false"
+                        );
+
+                }
+            );
+
+
+        boutonFermerParametres
+            .addEventListener(
+                "click",
+                () => {
+
+                    popupParametres
+                        .classList.remove(
+                            "ouverte"
+                        );
+
+                    popupParametres
+                        .setAttribute(
+                            "aria-hidden",
+                            "true"
+                        );
+
+                }
+            );
+
+
+        volumeMusique
+            .addEventListener(
+                "input",
+                event => {
+
+                    if (
+                        typeof audioManager !==
+                        "undefined"
+                    ) {
+
+                        audioManager
+                            .setVolumeMusique(
+                                Number(
+                                    event.target.value
+                                )
+                            );
+
+                    }
+
+                }
+            );
+
+
+        volumeAmbiance
+            .addEventListener(
+                "input",
+                event => {
+
+                    if (
+                        typeof audioManager !==
+                        "undefined"
+                    ) {
+
+                        audioManager
+                            .setVolumeAmbiance(
+                                Number(
+                                    event.target.value
+                                )
+                            );
+
+                    }
+
+                }
+            );
+
+
+        volumeEffets
+            .addEventListener(
+                "input",
+                event => {
+
+                    if (
+                        typeof audioManager !==
+                        "undefined"
+                    ) {
+
+                        audioManager
+                            .setVolumeEffets(
+                                Number(
+                                    event.target.value
+                                )
+                            );
+
+                    }
+
+                }
+            );
+
+    </script>
+<script src="js/audioManager.js"></script>
+<script src="js/animation.js"></script>
+<script src="js/sauvegarde.js"></script>
+<script src="js/chapitres.js"></script>
+<script src="js/conditions.js"></script>
+<script src="js/dialogue.js"></script>
+<script src="js/choix.js"></script>
+<script src="js/moteur.js"></script>
+</body>
+
+</html>

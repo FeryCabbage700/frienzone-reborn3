@@ -1,0 +1,392 @@
+/* ==========================================
+   FRIENDZONÉ REBORN
+   style.css
+========================================== */
+
+@import url("dialogue.css");
+@import url("choix.css");
+@import url("animations.css");
+
+/* ---------- Général ---------- */
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+html,
+body{
+
+    width:100%;
+    height:100%;
+
+    font-family:Arial, Helvetica, sans-serif;
+
+    background:#111;
+
+    color:white;
+
+    overflow:hidden;
+
+}
+
+
+/* ---------- Fond ---------- */
+
+body{
+
+    background-image:url("../images/fond_lycee.jpg");
+    background-size:cover;
+    background-position:center;
+    background-repeat:no-repeat;
+
+}
+
+
+/* Voile sombre */
+
+body::before{
+
+    content:"";
+
+    position:fixed;
+
+    inset:0;
+
+    background:rgba(0,0,0,.55);
+
+    backdrop-filter:blur(2px);
+
+    z-index:-1;
+
+}
+
+
+/* ---------- Conteneur principal ---------- */
+
+#jeu{
+
+    display:flex;
+
+    flex-direction:column;
+
+    height:100vh;
+
+}
+
+
+/* ---------- Barre du haut ---------- */
+
+#entete{
+
+    height:70px;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    background:rgba(0,0,0,.35);
+
+    backdrop-filter:blur(10px);
+
+    border-bottom:1px solid rgba(255,255,255,.08);
+
+}
+
+
+#titre{
+
+    font-size:26px;
+
+    font-weight:bold;
+
+    letter-spacing:1px;
+
+    color:white;
+
+}
+
+
+/* ---------- Conversation ---------- */
+
+#conversation{
+
+    flex:1;
+
+    overflow-y:auto;
+
+    padding:30px;
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:20px;
+
+}
+
+
+/* Scroll */
+
+#conversation::-webkit-scrollbar{
+
+    width:8px;
+
+}
+
+#conversation::-webkit-scrollbar-thumb{
+
+    background:#555;
+
+    border-radius:20px;
+
+}
+
+
+/* ---------- Messages ---------- */
+
+.message{
+
+    display:flex;
+
+    flex-direction:column;
+
+    max-width:70%;
+
+}
+
+.message.joueur{
+
+    align-self:flex-end;
+
+}
+
+.message.eva,
+.message.zoe,
+.message.emelyne{
+
+    align-self:flex-start;
+
+}
+
+.message.narration{
+
+    align-self:center;
+
+    max-width:90%;
+
+}
+
+
+/* ---------- Nom ---------- */
+
+.nom{
+
+    font-size:13px;
+
+    color:#bbbbbb;
+
+    margin-bottom:6px;
+
+}
+
+
+/* ---------- Bulles ---------- */
+
+.bulle{
+
+    padding:14px 18px;
+
+    border-radius:18px;
+
+    line-height:1.6;
+
+    font-size:17px;
+
+    word-break:break-word;
+
+}
+
+
+/* Joueur */
+
+.joueur .bulle{
+
+    background:#2F80ED;
+
+    color:white;
+
+}
+
+
+/* Eva */
+
+.eva .bulle{
+
+    background:#FF6FAF;
+
+    color:white;
+
+}
+
+
+/* Zoé */
+
+.zoe .bulle{
+
+    background:#FFB347;
+
+    color:white;
+
+}
+
+
+/* Émelyne */
+
+.emelyne .bulle{
+
+    background:#4CAF50;
+
+    color:white;
+
+}
+
+
+/* Narration */
+
+.narration .bulle{
+
+    background:rgba(255,255,255,.08);
+
+    color:#eeeeee;
+
+    text-align:center;
+
+    font-style:italic;
+
+}
+
+
+/* ---------- Zone des choix ---------- */
+
+#choix{
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:12px;
+
+    padding:20px;
+
+    background:rgba(0,0,0,.35);
+
+    backdrop-filter:blur(10px);
+
+    border-top:1px solid rgba(255,255,255,.08);
+
+}
+
+
+/* Boutons */
+
+#choix button{
+
+    padding:16px;
+
+    border:none;
+
+    border-radius:14px;
+
+    background:rgba(255,255,255,.08);
+
+    color:white;
+
+    font-size:17px;
+
+    text-align:left;
+
+    cursor:pointer;
+
+    transition:.25s;
+
+}
+
+#choix button:hover{
+
+    background:#2F80ED;
+
+    transform:translateX(8px);
+
+}
+
+#choix button:active{
+
+    transform:scale(.98);
+
+}
+
+
+/* ---------- Transition ---------- */
+
+#transition{
+
+    position:fixed;
+
+    inset:0;
+
+    background:black;
+
+    opacity:1;
+
+    pointer-events:none;
+
+    transition:opacity .8s;
+
+    z-index:9999;
+
+}
+
+
+/* ---------- Responsive ---------- */
+
+@media(max-width:900px){
+
+    #conversation{
+
+        padding:20px;
+
+    }
+
+    .message{
+
+        max-width:90%;
+
+    }
+
+    #titre{
+
+        font-size:22px;
+
+    }
+
+}
+
+@media(max-width:600px){
+
+    .bulle{
+
+        font-size:15px;
+
+    }
+
+    #choix button{
+
+        font-size:15px;
+
+    }
+
+}
