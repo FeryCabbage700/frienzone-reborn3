@@ -468,78 +468,79 @@ const moteur = {
     },
 
 
-    /*=====================================================
-        CALCULER LE DÉLAI DE LECTURE
-    =====================================================*/
+/*=====================================================
+    CALCULER LE DÉLAI DE LECTURE
+=====================================================*/
 
-    calculerDelaiLecture(scene) {
+calculerDelaiLecture(scene) {
 
-        if (!scene) {
+    if (!scene) {
+        return 4000;
+    }
 
-            return 1800;
+    let nombreCaracteres = 0;
+    let nombreMessages = 0;
 
-        }
+    if (Array.isArray(scene.dialogues)) {
 
-        let nombreCaracteres = 0;
+        nombreMessages =
+            scene.dialogues.length;
 
+        scene.dialogues.forEach(message => {
 
-        if (
-            Array.isArray(
-                scene.dialogues
-            )
-        ) {
-
-            scene.dialogues.forEach(
-                message => {
-
-                    nombreCaracteres +=
-                        String(
-                            message.texte || ""
-                        ).length;
-
-                }
-            );
-
-        }
-        else if (scene.texte) {
-
-            nombreCaracteres =
+            nombreCaracteres +=
                 String(
-                    scene.texte
+                    message.texte || ""
                 ).length;
 
-        }
+        });
 
+    }
+    else if (scene.texte) {
 
-        const delaiMinimum = 1800;
+        nombreMessages = 1;
 
-        const delaiMaximum = 6500;
+        nombreCaracteres =
+            String(scene.texte).length;
 
-        const delaiParCaractere = 24;
+    }
 
+    /*
+        Temps de lecture :
+        - 45 ms par caractère ;
+        - 700 ms supplémentaires par bulle ;
+        - minimum de 4 secondes ;
+        - maximum de 20 secondes.
+    */
 
-        const delaiCalcule =
+    const delaiMinimum = 4000;
+    const delaiMaximum = 20000;
 
-            nombreCaracteres *
+    const delaiParCaractere = 45;
+    const delaiParMessage = 700;
 
-            delaiParCaractere;
+    const delaiCalcule =
 
+        nombreCaracteres *
+        delaiParCaractere
 
-        return Math.min(
+        +
 
-            Math.max(
+        nombreMessages *
+        delaiParMessage;
 
-                delaiCalcule,
+    return Math.min(
 
-                delaiMinimum
+        Math.max(
+            delaiCalcule,
+            delaiMinimum
+        ),
 
-            ),
+        delaiMaximum
 
-            delaiMaximum
+    );
 
-        );
-
-    },
+},
 
 
     /*=====================================================
