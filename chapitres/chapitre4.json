@@ -1455,18 +1455,25 @@
                 }
             ],
 
+            "finChapitre4": {
+            "dialogues": [
+                {
+                    "personnage": "narrateur",
+                    "texte": "Chapitre 4 terminé."
+                }
+            ],
             "choix": [
                 {
-                    "texte": "Continuer",
-
+                    "texte": "Continuer vers le chapitre 5",
                     "message": {
                         "personnage": "narrateur",
-                        "texte": "La suite de l'histoire dépendra de la manière dont tu réagiras."
+                        "texte": "La conversation reprendra à 22 h..."
                     },
-
-                    "next": "chapitre5"
+                    "next": "chapitre4"
                 }
             ]
         }
+                }
+            
+        }
     }
-}
