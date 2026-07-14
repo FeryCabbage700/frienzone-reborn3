@@ -9,11 +9,11 @@
             "dialogues": [
                 {
                     "personnage": "narrateur",
-                    "texte": "Tu arrives dans ta nouvelle école."
+                    "texte": "{{nomJoueur}}, arrives dans sa nouvelle école."
                 },
                 {
                     "personnage": "narrateur",
-                    "texte": "Tu ne connais encore personne. Une nouvelle année commence."
+                    "texte": "{{nomJoueur}}, ne connais encore personne. Une nouvelle année commence."
                 }
             ],
 
@@ -23,7 +23,7 @@
 
                     "message": {
                         "personnage": "narrateur",
-                        "texte": "Tu décides de te diriger vers la cafétéria."
+                        "texte": "{{nomJoueur}}, décides de se diriger vers la cafétéria."
                     },
 
                     "next": "cafeteria"
@@ -34,7 +34,7 @@
 
                     "message": {
                         "personnage": "narrateur",
-                        "texte": "Tu décides de rejoindre ta salle de cours."
+                        "texte": "{{nomJoueur}} décides de rejoindre ta salle de cours."
                     },
 
                     "next": "cours"
@@ -48,7 +48,7 @@
             "dialogues": [
                 {
                     "personnage": "narrateur",
-                    "texte": "Tu arrives à la cafétéria."
+                    "texte": "{{nomJoueur}} arrives à la cafétéria."
                 },
                 {
                     "personnage": "narrateur",
@@ -56,7 +56,7 @@
                 },
                 {
                     "personnage": "narrateur",
-                    "texte": "Alors que tu cherches une place, un incident attire ton attention."
+                    "texte": "Alors que {{nomJoueur}} cherches une place, un incident attire son attention."
                 }
             ],
 
@@ -66,7 +66,7 @@
 
                     "message": {
                         "personnage": "narrateur",
-                        "texte": "Tu te rapproches légèrement pour comprendre ce qui vient de se passer."
+                        "texte": "{{nomJoueur}}, se rapproches légèrement pour comprendre ce qui vient de se passer."
                     },
 
                     "next": "chocolat"
@@ -104,11 +104,12 @@
 
                     "message": {
                         "personnage": "narrateur",
-                        "texte": "Tu décides d'aider l'étudiante qui vient de recevoir le chocolat chaud."
+                        "texte": "{{nomJoueur}}, décides d'aider l'étudiante qui vient de recevoir le chocolat chaud."
                     },
 
                     "effet": {
                         "gentillesse": 5,
+                        "relationEmelyne":1,
                         "rencontreEmelyne": true
                     },
 
@@ -120,11 +121,13 @@
 
                     "message": {
                         "personnage": "narrateur",
-                        "texte": "Tu décides d'aider la fille qui a renversé le chocolat à nettoyer les dégâts."
+                        "texte": "{{nomJoueur}} décides d'aider la fille qui a renversé le chocolat à nettoyer les dégâts."
                     },
 
                     "effet": {
                         "confianceEva": 3,
+                        "relationZoe":1,
+                        "gentillesse":5,
                         "rencontreZoe": true
                     },
 
@@ -136,11 +139,13 @@
 
                     "message": {
                         "personnage": "narrateur",
-                        "texte": "Tu préfères rester en retrait et observer la situation."
+                        "texte": "{{nomJoueur}}, préfères rester en retrait et observer la situation."
                     },
 
                     "effet": {
-                        "relationEva": 1
+                        "relationEva": -1,
+                        "relationZoe":-1,
+                        "rencontreEva":true
                     },
 
                     "next": "rencontreEva"
@@ -152,11 +157,11 @@
             "dialogues": [
                 {
                     "personnage": "narrateur",
-                    "texte": "Tu récupères rapidement quelques serviettes avant de rejoindre l'étudiante."
+                    "texte": "{{nomJoueur}} récupères rapidement quelques serviettes avant de rejoindre l'étudiante."
                 },
                 {
                     "personnage": "narrateur",
-                    "texte": "Tu l'aides à déplacer ses cahiers et à essuyer le chocolat renversé sur la table."
+                    "texte": "{{nomJoueur}} l'aides à déplacer ses cahiers et à essuyer le chocolat renversé sur la table."
                 },
                 {
                     "personnage": "emelyne",
@@ -178,11 +183,11 @@
 
             "choix": [
                 {
-                    "texte": "Dire que tu viens d'arriver",
+                    "texte": "Dire que tu viens d'arriver et te présenter.",
 
                     "message": {
                         "personnage": "joueur",
-                        "texte": "Oui, je viens d'arriver."
+                        "texte": "Oui, je viens d'arriver je m'appel {{nomJoueur}}."
                     },
 
                     "effet": {
@@ -235,7 +240,8 @@
                     },
 
                     "effet": {
-                        "relationEmelyne": 5
+                        "relationEmelyne": 5,
+                        "confianceEmelyne":-3
                     },
 
                     "next": "finJourneeEmelyne"
@@ -250,7 +256,8 @@
                     },
 
                     "effet": {
-                        "relationEmelyne": 3
+                        "relationEmelyne": 3,
+                        "confianceEmelyne":2
                     },
 
                     "next": "visiteProposee"
@@ -315,7 +322,7 @@
                 },
                 {
                     "personnage": "emelyne",
-                    "texte": "Si tu veux, je peux te faire visiter rapidement l'école."
+                    "texte": "Si tu veux, {{nomJoueur}}, je peux te faire visiter rapidement l'école."
                 },
                 {
                     "personnage": "emelyne",
@@ -338,7 +345,9 @@
 
                     "effet": {
                         "relationEmelyne": 5,
-                        "confianceEmelyne": 3
+                        "confianceEmelyne": 3,
+                        "relationEva":-1,
+                        "relationZoe":-1
                     },
 
                     "next": "debutVisiteEcole"
@@ -377,7 +386,7 @@
                 },
                 {
                     "personnage": "narrateur",
-                    "texte": "Tu quittes la cafétéria avec elle."
+                    "texte": "{{nomJoueur}} quittes la cafétéria avec elle."
                 }
             ],
 
@@ -387,7 +396,7 @@
 
                     "message": {
                         "personnage": "narrateur",
-                        "texte": "Tu suis Émelyne dans les couloirs de l'école."
+                        "texte": "{{nomJoueur}} suis Émelyne dans les couloirs de l'école."
                     },
 
                     "next": "visiteBatimentPrincipal"
@@ -490,7 +499,7 @@
                 },
                 {
                     "personnage": "narrateur",
-                    "texte": "Tu remarques qu'elle parle de cet endroit avec un peu plus d'enthousiasme."
+                    "texte": "{{nomJoueur}} remarques qu'elle parle de cet endroit avec un peu plus d'enthousiasme."
                 }
             ],
 
@@ -504,7 +513,8 @@
                     },
 
                     "effet": {
-                        "confianceEmelyne": 2
+                        "confianceEmelyne": 2,
+                        "relationEmelyne":1
                     },
 
                     "next": "reponseEmelyneCDI"
@@ -535,7 +545,7 @@
                 },
                 {
                     "personnage": "narrateur",
-                    "texte": "Tu comprends qu'Émelyne préfère les endroits calmes."
+                    "texte": "{{nomJoueur}} comprends qu'Émelyne préfère les endroits calmes."
                 }
             ],
 
@@ -546,6 +556,11 @@
                     "message": {
                         "personnage": "joueur",
                         "texte": "Je comprends. On continue ?"
+                    },
+
+                    "effet":{
+                        "relationEmelyne":3,
+                        "confianceEmelyne":1
                     },
 
                     "next": "visiteGymnase"
@@ -583,7 +598,8 @@
                     },
 
                     "effet": {
-                        "relationEmelyne": 1
+                        "relationEmelyne": 1,
+                        "confianceEmelyne":2
                     },
 
                     "next": "reponseEmelyneSport"
@@ -613,7 +629,7 @@
                     "texte": "Je préfère les activités plus calmes."
                 },
                 {
-                    "narrateur": "narrateur",
+                    "personnage": "narrateur",
                     "texte": "Sa réponse est brève, mais elle ne semble pas gênée par ta question."
                 }
             ],
@@ -625,6 +641,11 @@
                     "message": {
                         "personnage": "joueur",
                         "texte": "D'accord. Merci pour la visite."
+                    },
+
+                    "effet":{
+                        "confianceEmelyne":1,
+                        "relationEmelyne":4
                     },
 
                     "next": "finVisiteEcole"
@@ -640,7 +661,7 @@
                 },
                 {
                     "personnage": "emelyne",
-                    "texte": "Voilà. Tu devrais déjà avoir moins de mal à te repérer."
+                    "texte": "Voilà {{nomJoueur}}. Tu devrais déjà avoir moins de mal à te repérer."
                 },
                 {
                     "personnage": "emelyne",
@@ -690,7 +711,7 @@
                 },
                 {
                     "personnage": "emelyne",
-                    "texte": "D'accord."
+                    "texte": "D'accord {{nomJoueur}}."
                 },
                 {
                     "personnage": "emelyne",
@@ -708,7 +729,7 @@
 
                     "message": {
                         "personnage": "narrateur",
-                        "texte": "Tu salues Émelyne avant de continuer ta journée."
+                        "texte": "{{nomJoueur}} salues Émelyne avant de continuer ta journée."
                     },
 
                     "next": "finJourneeEmelyne"
@@ -724,7 +745,7 @@
                 },
                 {
                     "personnage": "narrateur",
-                    "texte": "Tu n'as pas encore vraiment parlé avec Eva."
+                    "texte": "{{nomJoueur}} n'as pas encore vraiment parlé avec Eva."
                 },
                 {
                     "personnage": "narrateur",
@@ -738,7 +759,7 @@
 
                     "message": {
                         "personnage": "narrateur",
-                        "texte": "Tu poursuis ta première journée dans l'établissement."
+                        "texte": "{{nomJoueur}} poursuis ta première journée dans l'établissement."
                     },
 
                     "next": "fin"
@@ -750,7 +771,7 @@
             "dialogues": [
                 {
                     "personnage": "narrateur",
-                    "texte": "Tu aides la fille qui a renversé le chocolat à ramasser les gobelets et à nettoyer la table."
+                    "texte": "{{nomJoueur}} aides la fille qui a renversé le chocolat à ramasser les gobelets et à nettoyer la table."
                 },
                 {
                     "personnage": "zoe",
@@ -768,11 +789,12 @@
 
                     "message": {
                         "personnage": "joueur",
-                        "texte": "Enchanté. Je viens d'arriver dans l'école."
+                        "texte": "Enchanté. Je viens d'arriver dans l'école, je m'appel {{nomJoueur}}."
                     },
 
                     "effet": {
-                        "relationZoe": 3
+                        "relationZoe": 3,
+                        "confianceZoe":1
                     },
 
                     "next": "presentationEva"
@@ -830,7 +852,8 @@
                     },
 
                     "effet": {
-                        "relationEva": 2
+                        "relationEva": 2,
+                        "rencontreEva":true
                     },
 
                     "next": "premierDialogueEva"
@@ -873,7 +896,7 @@
                 },
                 {
                     "personnage": "narrateur",
-                    "texte": "Tu remarques ensuite une table libre un peu plus loin."
+                    "texte": "{{nomJoueur}} remarques ensuite une table libre un peu plus loin."
                 }
             ],
 
@@ -887,7 +910,8 @@
                     },
 
                     "effet": {
-                        "relationEva": 2
+                        "relationEva": 2,
+                        "confianceEva":1
                     },
 
                     "next": "reponseEvaTable"
@@ -903,7 +927,7 @@
                 },
                 {
                     "personnage": "eva",
-                    "texte": "Oui, pourquoi pas."
+                    "texte": "Oui, pourquoi pas {{nomJoueur}}."
                 },
                 {
                     "personnage": "eva",
@@ -992,7 +1016,8 @@
                     "effet": {
                         "relationEva": 2,
                         "relationZoe": 3,
-                        "confianceEva": 1
+                        "confianceEva": 1,
+                        "confianceZoe":1
                     },
 
                     "next": "discussionGroupeSuite"
@@ -1007,7 +1032,8 @@
                     },
 
                     "effet": {
-                        "relationEva": 3
+                        "relationEva": 3,
+                        "confianceEva":1
                     },
 
                     "next": "discussionGroupeEva"
@@ -1100,7 +1126,8 @@
 
                     "effet": {
                         "confianceEva": 2,
-                        "relationZoe": 2
+                        "relationZoe": 2,
+                        "relationEva":2
                     },
 
                     "next": "rencontreEvaZoe"
@@ -1172,7 +1199,7 @@
 
                     "message": {
                         "personnage": "narrateur",
-                        "texte": "Tu quittes la table après avoir passé un moment agréable avec elles."
+                        "texte": "{{nomJoueur}} quittes la table après avoir passé un moment agréable avec elles."
                     },
 
                     "next": "fin"
@@ -1188,7 +1215,7 @@
                 },
                 {
                     "personnage": "eva",
-                    "texte": "D'accord..."
+                    "texte": "D'accord...{{nomJoueur}}"
                 },
                 {
                     "personnage": "eva",
@@ -1230,7 +1257,8 @@
                     },
 
                     "effet": {
-                        "relationEva": -1
+                        "relationEva": -1,
+                        "confianceEva":-1
                     },
 
                     "next": "discussionEvaLoisirs"
@@ -1294,7 +1322,8 @@
                     },
 
                     "effet": {
-                        "relationEva": 2
+                        "relationEva": 2,
+                        "confianceEva":1
                     },
 
                     "next": "discussionEvaJoueur"
@@ -1318,7 +1347,7 @@
                 },
                 {
                     "personnage": "narrateur",
-                    "texte": "Tu sens qu'elle reste volontairement vague."
+                    "texte": "{{nomJoueur}} sens qu'elle reste volontairement vague."
                 }
             ],
 
@@ -1410,7 +1439,7 @@
             "dialogues": [
                 {
                     "personnage": "narrateur",
-                    "texte": "Tu commences à parler de ton arrivée dans l'école et de tes premières impressions."
+                    "texte": "{{nomJoueur}} commences à parler de ton arrivée dans l'école et de tes premières impressions."
                 },
                 {
                     "personnage": "eva",
@@ -1436,7 +1465,8 @@
                     },
 
                     "effet": {
-                        "confianceEva": 3
+                        "confianceEva": 3,
+                        "relationEva":3
                     },
 
                     "next": "evaEvasivePasse"
@@ -1482,6 +1512,11 @@
                     "message": {
                         "personnage": "joueur",
                         "texte": "D'accord. Je ne vais pas insister."
+                    },
+
+                    "effet":{
+                        "relationEva":4,
+                        "confianceEva":3
                     },
 
                     "next": "finDiscussionSeule"
@@ -1579,7 +1614,8 @@
                     },
 
                     "effet": {
-                        "confianceEva": 2
+                        "confianceEva": 2,
+                        "relationEva":2
                     },
 
                     "next": "finDiscussionSeule"
@@ -1595,7 +1631,7 @@
                 },
                 {
                     "personnage": "eva",
-                    "texte": "Je vais rejoindre Zoé."
+                    "texte": "Je vais rejoindre Zoé,{{nomJoueur}}."
                 },
                 {
                     "personnage": "eva",
@@ -1612,6 +1648,12 @@
                         "texte": "Oui. À bientôt, Eva."
                     },
 
+                    "effet":{
+                        "relationEva":1,
+                        "confianceEva":1,
+                        "gentillesse":3
+                    },
+
                     "next": "fin"
                 }
             ]
@@ -1621,7 +1663,7 @@
             "dialogues": [
                 {
                     "personnage": "narrateur",
-                    "texte": "Tu restes à distance pendant que plusieurs élèves interviennent finalement."
+                    "texte": "{{nomJoueur}} restes à distance pendant que plusieurs élèves interviennent finalement."
                 },
                 {
                     "personnage": "narrateur",
@@ -1647,7 +1689,7 @@
 
                     "message": {
                         "personnage": "joueur",
-                        "texte": "Oui, je viens juste d'arriver."
+                        "texte": "Oui, je viens juste d'arriver,je m'appel {{nomJoueur}}."
                     },
 
                     "effet": {
@@ -1705,7 +1747,8 @@
 
                     "effet": {
                         "relationEva": 2,
-                        "gentillesse": 1
+                        "gentillesse": 1,
+                        "rencontreZoe":true
                     },
 
                     "next": "discussionEvaSansIntervention"
@@ -1775,7 +1818,8 @@
 
                     "effet": {
                         "relationEva": -3,
-                        "confianceEva": -2
+                        "confianceEva": -2,
+                        "gentillesse":-4
                     },
 
                     "next": "evaDesapprouve"
@@ -1787,7 +1831,7 @@
             "dialogues": [
                 {
                     "personnage": "eva",
-                    "texte": "Au moins, tu le reconnais."
+                    "texte": "Au moins, tu le reconnais, {{nomJoueur}}."
                 },
                 {
                     "personnage": "eva",
@@ -1839,7 +1883,7 @@
 
                     "message": {
                         "personnage": "narrateur",
-                        "texte": "Tu restes seul quelques instants avant de quitter la cafétéria."
+                        "texte": "{{nomJoueur}} restes seul quelques instants avant de quitter la cafétéria."
                     },
 
                     "next": "fin"
@@ -1887,7 +1931,7 @@
             "dialogues": [
                 {
                     "personnage": "narrateur",
-                    "texte": "Tu décides de rejoindre directement ta salle de cours."
+                    "texte": "{{nomJoueur}} décides de rejoindre directement ta salle de cours."
                 },
                 {
                     "personnage": "narrateur",
@@ -1895,7 +1939,7 @@
                 },
                 {
                     "personnage": "narrateur",
-                    "texte": "Tu trouves une place libre au fond de la salle."
+                    "texte": "{{nomJoueur}} trouves une place libre au fond de la salle."
                 },
                 {
                     "personnage": "narrateur",
@@ -1907,7 +1951,7 @@
                 },
                 {
                     "personnage": "eva",
-                    "texte": "On dirait qu'on va devoir travailler ensemble."
+                    "texte": "On dirait qu'on va devoir travailler ensemble, {{nomJoueur}}."
                 }
             ],
 
@@ -1917,7 +1961,7 @@
 
                     "message": {
                         "personnage": "joueur",
-                        "texte": "Salut. Je viens d'arriver dans l'école."
+                        "texte": "Salut. Je viens d'arriver dans l'école je m'appel {{nomJoueur}}."
                     },
 
                     "effet": {
@@ -1972,7 +2016,8 @@
                     },
 
                     "effet": {
-                        "relationEva": 2
+                        "relationEva": 2,
+                        "confianceEva":1
                     },
 
                     "next": "discussionEvaCours"
@@ -2106,7 +2151,8 @@
                     },
 
                     "effet": {
-                        "confianceEva": 2
+                        "confianceEva": 2,
+                        "relationEva":1
                     },
 
                     "next": "travailEvaCours"
@@ -2145,7 +2191,8 @@
 
                     "effet": {
                         "confianceEva": 3,
-                        "relationEva": 2
+                        "relationEva": 2,
+                        "gentillesse":2
                     },
 
                     "next": "finCoursEva"
@@ -2172,7 +2219,7 @@
             "dialogues": [
                 {
                     "personnage": "eva",
-                    "texte": "D'accord."
+                    "texte": "D'accord,  {{nomJoueur}}."
                 },
                 {
                     "personnage": "eva",
@@ -2206,7 +2253,7 @@
                 },
                 {
                     "personnage": "eva",
-                    "texte": "On a plutôt bien travaillé."
+                    "texte": "On a plutôt bien travaillé, {{nomJoueur}} ."
                 },
                 {
                     "personnage": "eva",
@@ -2254,7 +2301,7 @@
 
                     "message": {
                         "personnage": "narrateur",
-                        "texte": "Tu quittes l'école après cette première journée riche en rencontres."
+                        "texte": "{{nomJoueur}} quittes l'école après cette première journée riche en rencontres."
                     },
 
                     "next": "finChapitre"
