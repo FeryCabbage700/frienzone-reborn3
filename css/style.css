@@ -390,3 +390,101 @@ body::before{
     }
 
 }
+
+/* ==========================================
+   BOUTON POUR AFFICHER LES CHOIX
+========================================== */
+
+.zone-afficher-choix {
+
+    display: flex;
+
+    justify-content: center;
+
+    width: 100%;
+
+    margin: 24px 0 12px;
+
+    padding: 0 16px;
+
+}
+
+
+.bouton-afficher-choix {
+
+    min-width: 210px;
+
+    padding: 14px 24px;
+
+    border: 1px solid rgba(255, 255, 255, 0.2);
+
+    border-radius: 14px;
+
+    background: rgba(47, 128, 237, 0.9);
+
+    color: white;
+
+    font-size: 16px;
+
+    font-weight: 600;
+
+    cursor: pointer;
+
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+
+    transition:
+        transform 0.2s ease,
+        background 0.2s ease,
+        box-shadow 0.2s ease;
+
+    animation:
+        apparitionBoutonChoix 0.3s ease;
+}
+
+
+.bouton-afficher-choix:hover {
+
+    transform: translateY(-2px);
+
+    background: rgb(47, 128, 237);
+
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
+
+}
+
+
+.bouton-afficher-choix:active {
+
+    transform: scale(0.97);
+
+}
+
+
+.bouton-afficher-choix:focus-visible {
+
+    outline: 3px solid rgba(255, 255, 255, 0.8);
+
+    outline-offset: 3px;
+
+}
+
+
+@keyframes apparitionBoutonChoix {
+
+    from {
+
+        opacity: 0;
+
+        transform: translateY(10px);
+
+    }
+
+    to {
+
+        opacity: 1;
+
+        transform: translateY(0);
+
+    }
+
+}
