@@ -17,7 +17,9 @@ const dialogueManager = {
     initialiser() {
 
         this.conteneur =
-            document.getElementById("texte");
+            document.getElementById(
+                "texte"
+            );
 
         if (!this.conteneur) {
 
@@ -31,6 +33,504 @@ const dialogueManager = {
 
         console.log(
             "dialogueManager initialisé."
+        );
+
+    },
+
+
+    /*=====================================================
+        REMPLACER LES VARIABLES DANS LES TEXTES
+    =====================================================*/
+
+    remplacerVariables(
+        texte
+    ) {
+
+        let resultat =
+            String(
+                texte || ""
+            );
+
+        let nomJoueur =
+            "Joueur";
+
+
+        if (
+            typeof moteur !==
+                "undefined" &&
+            moteur.joueur &&
+            moteur.joueur.nom
+        ) {
+
+            nomJoueur =
+                String(
+                    moteur.joueur.nom
+                ).trim();
+
+        }
+
+
+        resultat = resultat
+            .replaceAll(
+                "{{nomJoueur}}",
+                nomJoueur
+            )
+            .replaceAll(
+                "{{nom du joueur}}",
+                nomJoueur
+            )
+            .replaceAll(
+                "{{nom_du_joueur}}",
+                nomJoueur
+            );
+
+
+        return resultat;
+
+    },
+
+
+    /*=====================================================
+        OBTENIR LA RELATION D'UN PERSONNAGE
+    =====================================================*/
+
+    obtenirRelationPersonnage(
+        personnage
+    ) {
+
+        if (
+            typeof moteur ===
+                "undefined" ||
+            !moteur.joueur
+        ) {
+
+            return 0;
+
+        }
+
+
+        const type =
+            this.normaliserPersonnage(
+                personnage
+            );
+
+
+        const variablesRelation = {
+
+            eva:
+                "relationEva",
+
+            zoe:
+                "relationZoe",
+
+            emelyne:
+                "relationEmelyne",
+
+            bryan:
+                "relationBryan"
+
+        };
+
+
+        const variable =
+            variablesRelation[type];
+
+
+        if (!variable) {
+
+            return 0;
+
+        }
+
+
+        const valeur =
+            Number(
+                moteur.joueur[variable]
+            );
+
+
+        if (
+            !Number.isFinite(
+                valeur
+            )
+        ) {
+
+            return 0;
+
+        }
+
+
+        return valeur;
+
+    },
+
+
+    /*=====================================================
+        OBTENIR LA CONFIANCE D'UN PERSONNAGE
+    =====================================================*/
+
+    obtenirConfiancePersonnage(
+        personnage
+    ) {
+
+        if (
+            typeof moteur ===
+                "undefined" ||
+            !moteur.joueur
+        ) {
+
+            return 0;
+
+        }
+
+
+        const type =
+            this.normaliserPersonnage(
+                personnage
+            );
+
+
+        const variablesConfiance = {
+
+            eva:
+                "confianceEva",
+
+            zoe:
+                "confianceZoe",
+
+            emelyne:
+                "confianceEmelyne",
+
+            bryan:
+                "confianceBryan"
+
+        };
+
+
+        const variable =
+            variablesConfiance[type];
+
+
+        if (!variable) {
+
+            return 0;
+
+        }
+
+
+        const valeur =
+            Number(
+                moteur.joueur[variable]
+            );
+
+
+        if (
+            !Number.isFinite(
+                valeur
+            )
+        ) {
+
+            return 0;
+
+        }
+
+
+        return valeur;
+
+    },
+
+
+    /*=====================================================
+        DÉTERMINER LE NIVEAU DE RELATION
+    =====================================================*/
+
+    obtenirNiveauRelation(
+        personnage
+    ) {
+
+        const relation =
+            this.obtenirRelationPersonnage(
+                personnage
+            );
+
+
+        if (
+            relation < 0
+        ) {
+
+            return "negative";
+
+        }
+
+
+        if (
+            relation < 5
+        ) {
+
+            return "neutre";
+
+        }
+
+
+        if (
+            relation < 10
+        ) {
+
+            return "amicale";
+
+        }
+
+
+        return "proche";
+
+    },
+
+
+    /*=====================================================
+        DÉTERMINER LE NIVEAU DE CONFIANCE
+    =====================================================*/
+
+    obtenirNiveauConfiance(
+        personnage
+    ) {
+
+        const confiance =
+            this.obtenirConfiancePersonnage(
+                personnage
+            );
+
+
+        if (
+            confiance < 0
+        ) {
+
+            return "negative";
+
+        }
+
+
+        if (
+            confiance < 5
+        ) {
+
+            return "faible";
+
+        }
+
+
+        if (
+            confiance < 10
+        ) {
+
+            return "moyenne";
+
+        }
+
+
+        return "haute";
+
+    },
+
+
+    /*=====================================================
+        CHOISIR LE TEXTE SELON LA RELATION
+    =====================================================*/
+
+    obtenirTexteMessage(
+        message
+    ) {
+
+        if (!message) {
+
+            return "";
+
+        }
+
+
+        /*
+            Ancien format :
+
+            {
+                "personnage": "eva",
+                "texte": "Salut."
+            }
+        */
+
+        if (
+            !message.variantes ||
+            typeof message.variantes !==
+                "object"
+        ) {
+
+            return message.texte || "";
+
+        }
+
+
+        /*
+            relationAvec permet d'utiliser
+            la relation d'un personnage même
+            lorsque le message appartient au narrateur.
+
+            Exemple :
+
+            {
+                "personnage": "narrateur",
+                "relationAvec": "emelyne",
+                "variantes": { ... }
+            }
+        */
+
+        const personnageReference =
+
+            message.relationAvec ||
+
+            message.personnage ||
+
+            message.type ||
+
+            "narrateur";
+
+
+        const niveau =
+            this.obtenirNiveauRelation(
+                personnageReference
+            );
+
+
+        return (
+
+            message.variantes[niveau] ||
+
+            message.variantes.neutre ||
+
+            message.variantes.amicale ||
+
+            message.variantes.proche ||
+
+            message.variantes.negative ||
+
+            message.texte ||
+
+            ""
+
+        );
+
+    },
+
+
+    /*=====================================================
+        CHOISIR LE TEXTE SELON LA CONFIANCE
+    =====================================================*/
+
+    obtenirTexteConfiance(
+        message
+    ) {
+
+        if (!message) {
+
+            return "";
+
+        }
+
+
+        if (
+            !message.variantesConfiance ||
+            typeof message.variantesConfiance !==
+                "object"
+        ) {
+
+            return this.obtenirTexteMessage(
+                message
+            );
+
+        }
+
+
+        const personnageReference =
+
+            message.confianceAvec ||
+
+            message.relationAvec ||
+
+            message.personnage ||
+
+            message.type ||
+
+            "narrateur";
+
+
+        const niveau =
+            this.obtenirNiveauConfiance(
+                personnageReference
+            );
+
+
+        return (
+
+            message.variantesConfiance[niveau] ||
+
+            message.variantesConfiance.faible ||
+
+            message.texte ||
+
+            this.obtenirTexteMessage(
+                message
+            ) ||
+
+            ""
+
+        );
+
+    },
+
+
+    /*=====================================================
+        OBTENIR LE TEXTE FINAL
+    =====================================================*/
+
+    preparerTexteMessage(
+        message
+    ) {
+
+        if (!message) {
+
+            return "";
+
+        }
+
+
+        let texte =
+            "";
+
+
+        /*
+            Priorité aux variantes de confiance
+            lorsqu'elles sont présentes.
+        */
+
+        if (
+            message.variantesConfiance
+        ) {
+
+            texte =
+                this.obtenirTexteConfiance(
+                    message
+                );
+
+        }
+        else {
+
+            texte =
+                this.obtenirTexteMessage(
+                    message
+                );
+
+        }
+
+
+        return this.remplacerVariables(
+            texte
         );
 
     },
@@ -54,7 +554,8 @@ const dialogueManager = {
 
         }
 
-        this.conteneur.innerHTML = "";
+        this.conteneur.innerHTML =
+            "";
 
     },
 
@@ -63,7 +564,9 @@ const dialogueManager = {
         AFFICHER UNE SCÈNE
     =====================================================*/
 
-    afficherScene(scene) {
+    afficherScene(
+        scene
+    ) {
 
         if (!scene) {
 
@@ -75,23 +578,45 @@ const dialogueManager = {
 
         }
 
+
         /*
-            Important :
-            on ne vide pas la conversation ici.
-            Les messages doivent rester visibles
-            comme dans une discussion SMS.
+            Les anciens messages restent visibles
+            afin de conserver l'apparence
+            d'une conversation SMS.
         */
 
         if (
-            Array.isArray(scene.dialogues)
+            Array.isArray(
+                scene.dialogues
+            )
         ) {
 
             scene.dialogues.forEach(
                 message => {
 
+                    if (!message) {
+
+                        return;
+
+                    }
+
+
+                    const texteMessage =
+                        this.preparerTexteMessage(
+                            message
+                        );
+
+
+                    if (!texteMessage) {
+
+                        return;
+
+                    }
+
+
                     this.ajouterMessage(
 
-                        message.texte || "",
+                        texteMessage,
 
                         message.personnage ||
                         message.type ||
@@ -106,16 +631,21 @@ const dialogueManager = {
 
         }
 
+
         /*
             Compatibilité avec l'ancien format :
+
             "texte": "..."
         */
 
         if (scene.texte) {
 
             this.ajouterMessage(
+
                 scene.texte,
+
                 "narrateur"
+
             );
 
         }
@@ -144,17 +674,31 @@ const dialogueManager = {
 
         }
 
+
         const type =
             this.normaliserPersonnage(
                 personnage
             );
 
+
+        const contenuPrepare =
+            this.remplacerVariables(
+                contenu
+            );
+
+
         const message =
-            document.createElement("div");
+            document.createElement(
+                "div"
+            );
+
 
         message.classList.add(
+
             "message",
+
             type
+
         );
 
 
@@ -162,17 +706,31 @@ const dialogueManager = {
             Nom du personnage
         */
 
-        if (type !== "narration") {
+        if (
+            type !== "narration" &&
+            type !== "pensee"
+        ) {
 
             const nom =
-                document.createElement("div");
+                document.createElement(
+                    "div"
+                );
 
-            nom.classList.add("nom");
+
+            nom.classList.add(
+                "nom"
+            );
+
 
             nom.textContent =
-                this.obtenirNom(type);
+                this.obtenirNom(
+                    type
+                );
 
-            message.appendChild(nom);
+
+            message.appendChild(
+                nom
+            );
 
         }
 
@@ -182,21 +740,37 @@ const dialogueManager = {
         */
 
         const bulle =
-            document.createElement("div");
+            document.createElement(
+                "div"
+            );
 
-        bulle.classList.add("bulle");
 
-        bulle.innerHTML =
-            contenu || "";
-
-        message.appendChild(bulle);
+        bulle.classList.add(
+            "bulle"
+        );
 
 
         /*
-            Animation
+            innerHTML permet de conserver
+            les anciennes balises <br>.
         */
 
-        if (type === "joueur") {
+        bulle.innerHTML =
+            contenuPrepare;
+
+
+        message.appendChild(
+            bulle
+        );
+
+
+        /*
+            Classe d'animation
+        */
+
+        if (
+            type === "joueur"
+        ) {
 
             message.classList.add(
                 "envoye"
@@ -226,14 +800,22 @@ const dialogueManager = {
             "undefined"
         ) {
 
-            if (type === "joueur") {
+            if (
+                type === "joueur" &&
+                typeof animationManager.envoi ===
+                    "function"
+            ) {
 
                 animationManager.envoi(
                     message
                 );
 
             }
-            else {
+            else if (
+                type !== "joueur" &&
+                typeof animationManager.reception ===
+                    "function"
+            ) {
 
                 animationManager.reception(
                     message
@@ -273,48 +855,94 @@ const dialogueManager = {
 
         }
 
+
+        const contenuPrepare =
+            this.remplacerVariables(
+                contenu
+            );
+
+
         const type =
             this.normaliserPersonnage(
                 personnage
             );
 
+
         const message =
-            document.createElement("div");
+            document.createElement(
+                "div"
+            );
+
 
         message.classList.add(
+
             "message",
+
             type
+
         );
 
 
-        if (type !== "narration") {
+        /*
+            Nom du personnage
+        */
+
+        if (
+            type !== "narration" &&
+            type !== "pensee"
+        ) {
 
             const nom =
-                document.createElement("div");
+                document.createElement(
+                    "div"
+                );
 
-            nom.classList.add("nom");
+
+            nom.classList.add(
+                "nom"
+            );
+
 
             nom.textContent =
-                this.obtenirNom(type);
+                this.obtenirNom(
+                    type
+                );
 
-            message.appendChild(nom);
+
+            message.appendChild(
+                nom
+            );
 
         }
 
 
+        /*
+            Bulle
+        */
+
         const bulle =
-            document.createElement("div");
+            document.createElement(
+                "div"
+            );
 
-        bulle.classList.add("bulle");
 
-        message.appendChild(bulle);
-
-        this.conteneur.appendChild(
-            message
+        bulle.classList.add(
+            "bulle"
         );
 
 
-        if (type === "joueur") {
+        message.appendChild(
+            bulle
+        );
+
+
+        /*
+            Classe d'animation
+        */
+
+        if (
+            type === "joueur"
+        ) {
 
             message.classList.add(
                 "envoye"
@@ -330,21 +958,35 @@ const dialogueManager = {
         }
 
 
-        let texteAffiche = "";
+        this.conteneur.appendChild(
+            message
+        );
+
+
+        /*
+            Écriture caractère par caractère
+        */
+
+        let texteAffiche =
+            "";
+
 
         for (
             let index = 0;
-            index < contenu.length;
+            index < contenuPrepare.length;
             index++
         ) {
 
             texteAffiche +=
-                contenu[index];
+                contenuPrepare[index];
+
 
             bulle.textContent =
                 texteAffiche;
 
+
             this.defiler();
+
 
             await this.attendre(
                 vitesse
@@ -352,34 +994,42 @@ const dialogueManager = {
 
         }
 
+
         return message;
 
     },
 
 
     /*=====================================================
-        NORMALISER LE NOM DU PERSONNAGE
+        NORMALISER LE PERSONNAGE
     =====================================================*/
 
-    normaliserPersonnage(personnage) {
+    normaliserPersonnage(
+        personnage
+    ) {
 
         const valeur =
             String(
-                personnage || "narrateur"
+                personnage ||
+                "narrateur"
             )
                 .toLowerCase()
-                .normalize("NFD")
+                .normalize(
+                    "NFD"
+                )
                 .replace(
                     /[\u0300-\u036f]/g,
                     ""
                 )
                 .trim();
 
+
         switch (valeur) {
 
             case "joueur":
             case "toi":
             case "vous":
+            case "player":
 
                 return "joueur";
 
@@ -399,8 +1049,35 @@ const dialogueManager = {
                 return "emelyne";
 
 
+            case "bryan":
+
+                return "bryan";
+
+
+            case "eleve":
+            case "etudiant":
+            case "etudiante":
+
+                return "eleve";
+
+
+            case "systeme":
+
+                return "systeme";
+
+
+            case "pensee":
+            case "pensée":
+
+                return "pensee";
+
+
             case "narration":
             case "narrateur":
+
+                return "narration";
+
+
             default:
 
                 return "narration";
@@ -414,21 +1091,64 @@ const dialogueManager = {
         NOM AFFICHÉ
     =====================================================*/
 
-    obtenirNom(type) {
+    obtenirNom(
+        personnage
+    ) {
+
+        if (
+            personnage === "joueur" &&
+            typeof moteur !==
+                "undefined" &&
+            moteur.joueur &&
+            moteur.joueur.nom
+        ) {
+
+            return String(
+                moteur.joueur.nom
+            );
+
+        }
+
 
         const noms = {
 
-            joueur: "Toi",
+            joueur:
+                "Joueur",
 
-            eva: "Eva",
+            eva:
+                "Eva",
 
-            zoe: "Zoé",
+            zoe:
+                "Zoé",
 
-            emelyne: "Émelyne"
+            emelyne:
+                "Émelyne",
+
+            bryan:
+                "Bryan",
+
+            eleve:
+                "Élève",
+
+            systeme:
+                "Système",
+
+            narration:
+                "Narrateur",
+
+            pensee:
+                "Pensée"
 
         };
 
-        return noms[type] || "";
+
+        return (
+
+            noms[personnage] ||
+
+            personnage
+
+        );
 
     },
 
@@ -437,7 +1157,9 @@ const dialogueManager = {
         MESSAGE SYSTÈME
     =====================================================*/
 
-    systeme(texte) {
+    systeme(
+        texte
+    ) {
 
         if (!texte) {
 
@@ -445,9 +1167,13 @@ const dialogueManager = {
 
         }
 
+
         this.ajouterMessage(
+
             texte,
-            "narrateur"
+
+            "systeme"
+
         );
 
     },
@@ -457,7 +1183,9 @@ const dialogueManager = {
         NOTIFICATION
     =====================================================*/
 
-    notification(texte) {
+    notification(
+        texte
+    ) {
 
         if (!texte) {
 
@@ -465,40 +1193,59 @@ const dialogueManager = {
 
         }
 
+
         const notification =
-            document.createElement("div");
+            document.createElement(
+                "div"
+            );
+
 
         notification.className =
             "notification";
 
+
         notification.textContent =
-            texte;
+            this.remplacerVariables(
+                texte
+            );
+
 
         document.body.appendChild(
             notification
         );
 
-        requestAnimationFrame(() => {
 
-            notification.classList.add(
-                "visible"
-            );
+        requestAnimationFrame(
+            () => {
 
-        });
+                notification.classList.add(
+                    "visible"
+                );
 
-        setTimeout(() => {
+            }
+        );
 
-            notification.classList.remove(
-                "visible"
-            );
 
-            setTimeout(() => {
+        setTimeout(
+            () => {
 
-                notification.remove();
+                notification.classList.remove(
+                    "visible"
+                );
 
-            }, 300);
 
-        }, 2500);
+                setTimeout(
+                    () => {
+
+                        notification.remove();
+
+                    },
+                    300
+                );
+
+            },
+            2500
+        );
 
     },
 
@@ -514,24 +1261,29 @@ const dialogueManager = {
                 "conversation"
             );
 
+
         if (!conversation) {
 
             return;
 
         }
 
-        requestAnimationFrame(() => {
 
-            conversation.scrollTo({
+        requestAnimationFrame(
+            () => {
 
-                top:
-                    conversation.scrollHeight,
+                conversation.scrollTo({
 
-                behavior: "smooth"
+                    top:
+                        conversation.scrollHeight,
 
-            });
+                    behavior:
+                        "smooth"
 
-        });
+                });
+
+            }
+        );
 
     },
 
@@ -540,14 +1292,19 @@ const dialogueManager = {
         ATTENDRE
     =====================================================*/
 
-    attendre(duree) {
+    attendre(
+        duree
+    ) {
 
         return new Promise(
             resolve => {
 
                 setTimeout(
+
                     resolve,
+
                     duree
+
                 );
 
             }
@@ -563,10 +1320,13 @@ const dialogueManager = {
 =========================================================*/
 
 window.addEventListener(
+
     "DOMContentLoaded",
+
     () => {
 
         dialogueManager.initialiser();
 
     }
+
 );
