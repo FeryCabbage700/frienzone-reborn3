@@ -9,7 +9,15 @@ const chapitresManager = {
         "chapitres/chapitre2.json",
         "chapitres/chapitre3.json",
         "chapitres/chapitre4.json",
-        "chapitres/chapitre5.json"
+        "chapitres/chapitre5.json",
+        "chapitres/chapitre6.json",
+        "chapitre/chapitre7.json",
+        "chapitre/chapitre8.json",
+        "chapitre/chapitre9.json",
+        "chapitre/chapiree10.json",
+        "chapitre/chapitre11.json",
+        "chapitre/chapitre12.json",
+        "chapitre/chapitre13.jsonS"
     ],
 
     async charger() {
