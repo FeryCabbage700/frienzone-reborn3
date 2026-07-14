@@ -12,27 +12,9 @@ const moteur = {
     chapitre: null,
 
     timerChoix: null,
+    boutonChoix: null,
 
-    joueur: {
-
-        relationEva: 0,
-        confianceEva: 0,
-
-        relationEmelyne: 0,
-        confianceEmelyne: 0,
-
-        relationZoe: 0,
-        confianceZoe: 0,
-
-        gentillesse: 0,
-        courage: 0,
-        humour: 0,
-
-        rencontreEva: false,
-        rencontreEmelyne: false,
-        rencontreZoe: false
-
-    },
+    joueur: null,
 
 
     /*=====================================================
@@ -45,9 +27,34 @@ const moteur = {
 
             this.initialiserTransition();
 
+            if (
+                typeof chapitresManager ===
+                "undefined"
+            ) {
+
+                throw new Error(
+                    "chapitresManager est introuvable."
+                );
+
+            }
+
+            if (
+                typeof sauvegardeManager ===
+                "undefined"
+            ) {
+
+                throw new Error(
+                    "sauvegardeManager est introuvable."
+                );
+
+            }
+
             await chapitresManager.charger();
 
-            if (chapitresManager.nombre() === 0) {
+
+            if (
+                chapitresManager.nombre() === 0
+            ) {
 
                 this.afficherErreur(
                     "Aucun chapitre n'a pu être chargé."
@@ -57,8 +64,42 @@ const moteur = {
 
             }
 
+
+            /*
+                Vérifie si le joueur vient
+                de cliquer sur Nouvelle partie
+                depuis le menu.
+            */
+
+            const nouvellePartieDemandee =
+
+                localStorage.getItem(
+                    "nouvellePartieDemandee"
+                ) === "true";
+
+
+            if (nouvellePartieDemandee) {
+
+                localStorage.removeItem(
+                    "nouvellePartieDemandee"
+                );
+
+                sauvegardeManager.supprimer();
+
+                this.nouvellePartie();
+
+                return;
+
+            }
+
+
+            /*
+                Charge une sauvegarde existante.
+            */
+
             const sauvegarde =
                 sauvegardeManager.charger();
+
 
             if (sauvegarde) {
 
@@ -107,15 +148,69 @@ const moteur = {
 
         }
 
-        setTimeout(() => {
+        setTimeout(
+            () => {
 
-            transition.classList.remove(
-                "actif"
+                transition.classList.remove(
+                    "actif"
+                );
+
+                transition.style.opacity =
+                    "0";
+
+            },
+            100
+        );
+
+    },
+
+
+    /*=====================================================
+        DEMANDER LE NOM DU JOUEUR
+    =====================================================*/
+
+    demanderNomJoueur() {
+
+        let nomChoisi =
+            window.prompt(
+
+                "Quel est le prénom de ton personnage ?",
+
+                "Mikael"
+
             );
 
-            transition.style.opacity = "0";
 
-        }, 100);
+        nomChoisi =
+            String(
+                nomChoisi || ""
+            ).trim();
+
+
+        if (
+            nomChoisi.length < 2
+        ) {
+
+            nomChoisi =
+                "Joueur";
+
+        }
+
+
+        if (
+            nomChoisi.length > 20
+        ) {
+
+            nomChoisi =
+                nomChoisi.substring(
+                    0,
+                    20
+                );
+
+        }
+
+
+        return nomChoisi;
 
     },
 
@@ -127,7 +222,10 @@ const moteur = {
     nouvellePartie() {
 
         const premierChapitre =
-            chapitresManager.obtenir(0);
+            chapitresManager.obtenir(
+                0
+            );
+
 
         if (!premierChapitre) {
 
@@ -139,14 +237,27 @@ const moteur = {
 
         }
 
-        this.chapitreActuel = 0;
+
+        this.chapitreActuel =
+            0;
 
         this.sceneActuelle =
             premierChapitre.debut;
 
+
         this.joueur =
             sauvegardeManager
                 .creerJoueurParDefaut();
+
+
+        /*
+            Demande le prénom avant
+            de créer la sauvegarde.
+        */
+
+        this.joueur.nom =
+            this.demanderNomJoueur();
+
 
         if (
             typeof dialogueManager !==
@@ -157,11 +268,16 @@ const moteur = {
 
         }
 
+
         this.sauvegarder();
 
+
         this.chargerChapitre(
+
             0,
+
             this.sceneActuelle
+
         );
 
     },
@@ -175,11 +291,22 @@ const moteur = {
         sauvegarde
     ) {
 
+        if (!sauvegarde) {
+
+            this.nouvellePartie();
+
+            return;
+
+        }
+
+
         this.chapitreActuel =
             sauvegarde.chapitre ?? 0;
 
+
         this.sceneActuelle =
             sauvegarde.scene || "";
+
 
         this.joueur = {
 
@@ -189,6 +316,26 @@ const moteur = {
             ...(sauvegarde.joueur || {})
 
         };
+
+
+        /*
+            Compatibilité avec les anciennes
+            sauvegardes ne contenant pas de prénom.
+        */
+
+        if (
+            !this.joueur.nom ||
+            this.joueur.nom.toLowerCase() ===
+                "joueur"
+        ) {
+
+            this.joueur.nom =
+                this.demanderNomJoueur();
+
+            this.sauvegarder();
+
+        }
+
 
         this.chargerChapitre(
 
@@ -202,10 +349,20 @@ const moteur = {
 
 
     /*=====================================================
-        SAUVEGARDE
+        SAUVEGARDER
     =====================================================*/
 
     sauvegarder() {
+
+        if (
+            typeof sauvegardeManager ===
+            "undefined"
+        ) {
+
+            return;
+
+        }
+
 
         sauvegardeManager.sauvegarder({
 
@@ -221,7 +378,7 @@ const moteur = {
             musique:
 
                 typeof audioManager !==
-                "undefined"
+                    "undefined"
 
                     ? audioManager
                         .musiqueActuelle
@@ -231,7 +388,7 @@ const moteur = {
             ambiance:
 
                 typeof audioManager !==
-                "undefined"
+                    "undefined"
 
                     ? audioManager
                         .ambianceActuelle
@@ -257,18 +414,24 @@ const moteur = {
                 numero
             );
 
+
         if (!chapitre) {
 
             this.afficherErreur(
+
                 "Chapitre introuvable : " +
+
                 (numero + 1)
+
             );
 
             return;
 
         }
 
-        this.annulerTimerChoix();
+
+        this.annulerAttenteChoix();
+
 
         this.chapitreActuel =
             numero;
@@ -276,22 +439,26 @@ const moteur = {
         this.chapitre =
             chapitre;
 
+
         const titre =
             document.getElementById(
                 "titre"
             );
 
+
         if (titre) {
 
             titre.textContent =
-                chapitre.titre;
+                chapitre.titre ||
+                `Chapitre ${numero + 1}`;
 
         }
+
 
         if (
             chapitre.musique &&
             typeof audioManager !==
-            "undefined"
+                "undefined"
         ) {
 
             audioManager.changerMusique(
@@ -300,11 +467,24 @@ const moteur = {
 
         }
 
+
         const sceneInitiale =
 
             sceneDepart ||
 
             chapitre.debut;
+
+
+        if (!sceneInitiale) {
+
+            this.afficherErreur(
+                "Aucune scène de départ n'est définie."
+            );
+
+            return;
+
+        }
+
 
         this.chargerScene(
             sceneInitiale
@@ -312,12 +492,13 @@ const moteur = {
 
     },
 
-
-    /*=====================================================
+        /*=====================================================
         CHARGER UNE SCÈNE
     =====================================================*/
 
-    chargerScene(id) {
+    chargerScene(
+        id
+    ) {
 
         if (!this.chapitre) {
 
@@ -329,81 +510,130 @@ const moteur = {
 
         }
 
+
         const scene =
-            this.chapitre.scenes[id];
+            this.chapitre.scenes?.[id];
+
 
         if (!scene) {
 
             this.afficherErreur(
+
                 "Scène introuvable : " +
+
                 id
+
             );
 
             return;
 
         }
 
-        this.annulerTimerChoix();
+
+        this.annulerAttenteChoix();
+
 
         if (
             typeof choixManager !==
-            "undefined"
+                "undefined"
         ) {
 
-            choixManager.fermerPopup();
+            if (
+                typeof choixManager.fermerPopup ===
+                    "function"
+            ) {
 
-            choixManager.vider();
+                choixManager.fermerPopup();
+
+            }
+
+            if (
+                typeof choixManager.vider ===
+                    "function"
+            ) {
+
+                choixManager.vider();
+
+            }
 
         }
 
 
-        /* Vérifie l'accès à la scène */
+        /* Vérification de l'accès */
 
-        const accesAutorise =
-            conditionsManager
-                .verifierAccesScene(
-                    scene,
-                    this.joueur
-                );
+        if (
+            typeof conditionsManager !==
+                "undefined" &&
+            typeof conditionsManager
+                .verifierAccesScene ===
+                "function"
+        ) {
 
-        if (!accesAutorise) {
+            const accesAutorise =
+                conditionsManager
+                    .verifierAccesScene(
 
-            if (scene.sinon) {
+                        scene,
 
-                this.chargerScene(
-                    scene.sinon
-                );
+                        this.joueur
+
+                    );
+
+
+            if (!accesAutorise) {
+
+                if (scene.sinon) {
+
+                    this.chargerScene(
+                        scene.sinon
+                    );
+
+                }
+                else {
+
+                    this.afficherErreur(
+                        "Cette scène n'est pas accessible."
+                    );
+
+                }
+
+                return;
 
             }
-            else {
-
-                this.afficherErreur(
-                    "Cette scène n'est pas accessible."
-                );
-
-            }
-
-            return;
 
         }
 
 
-        /* Vérifie une redirection automatique */
+        /* Redirection automatique */
 
-        const redirection =
-            conditionsManager
-                .obtenirRedirection(
-                    scene,
-                    this.joueur
+        if (
+            typeof conditionsManager !==
+                "undefined" &&
+            typeof conditionsManager
+                .obtenirRedirection ===
+                "function"
+        ) {
+
+            const redirection =
+                conditionsManager
+                    .obtenirRedirection(
+
+                        scene,
+
+                        this.joueur
+
+                    );
+
+
+            if (redirection) {
+
+                this.gererDestination(
+                    redirection
                 );
 
-        if (redirection) {
+                return;
 
-            this.gererDestination(
-                redirection
-            );
-
-            return;
+            }
 
         }
 
@@ -412,53 +642,62 @@ const moteur = {
             id;
 
 
-        /* Audio */
-
         this.gererAudioScene(
             scene
         );
 
 
-        /* Dialogues */
+        if (
+            typeof dialogueManager !==
+                "undefined" &&
+            typeof dialogueManager.afficherScene ===
+                "function"
+        ) {
 
-        dialogueManager.afficherScene(
-            scene
-        );
-
-
-        /* Préparation des choix */
-
-        const choixDisponibles =
-            conditionsManager
-                .preparerChoix(
-                    scene.choix || [],
-                    this.joueur
-                );
-
-
-        /* Délai de lecture */
-
-        const delaiChoix =
-            this.calculerDelaiLecture(
+            dialogueManager.afficherScene(
                 scene
             );
+
+        }
+
+
+        let choixDisponibles =
+            Array.isArray(
+                scene.choix
+            )
+
+                ? scene.choix
+
+                : [];
+
+
+        if (
+            typeof conditionsManager !==
+                "undefined" &&
+            typeof conditionsManager.preparerChoix ===
+                "function"
+        ) {
+
+            choixDisponibles =
+                conditionsManager
+                    .preparerChoix(
+
+                        choixDisponibles,
+
+                        this.joueur
+
+                    );
+
+        }
 
 
         if (
             choixDisponibles.length > 0
         ) {
 
-            this.timerChoix =
-                setTimeout(() => {
-
-                    choixManager.afficher(
-                        choixDisponibles
-                    );
-
-                    this.timerChoix =
-                        null;
-
-                }, delaiChoix);
+            this.afficherBoutonChoix(
+                choixDisponibles
+            );
 
         }
 
@@ -468,99 +707,193 @@ const moteur = {
     },
 
 
-/*=====================================================
-    CALCULER LE DÉLAI DE LECTURE
-=====================================================*/
-
-calculerDelaiLecture(scene) {
-
-    if (!scene) {
-        return 4000;
-    }
-
-    let nombreCaracteres = 0;
-    let nombreMessages = 0;
-
-    if (Array.isArray(scene.dialogues)) {
-
-        nombreMessages =
-            scene.dialogues.length;
-
-        scene.dialogues.forEach(message => {
-
-            nombreCaracteres +=
-                String(
-                    message.texte || ""
-                ).length;
-
-        });
-
-    }
-    else if (scene.texte) {
-
-        nombreMessages = 1;
-
-        nombreCaracteres =
-            String(scene.texte).length;
-
-    }
-
-    /*
-        Temps de lecture :
-        - 45 ms par caractère ;
-        - 700 ms supplémentaires par bulle ;
-        - minimum de 4 secondes ;
-        - maximum de 20 secondes.
-    */
-
-    const delaiMinimum = 4000;
-    const delaiMaximum = 20000;
-
-    const delaiParCaractere = 45;
-    const delaiParMessage = 700;
-
-    const delaiCalcule =
-
-        nombreCaracteres *
-        delaiParCaractere
-
-        +
-
-        nombreMessages *
-        delaiParMessage;
-
-    return Math.min(
-
-        Math.max(
-            delaiCalcule,
-            delaiMinimum
-        ),
-
-        delaiMaximum
-
-    );
-
-},
-
-
     /*=====================================================
-        ANNULER LE TIMER DES CHOIX
+        AFFICHER LE BOUTON DES CHOIX
     =====================================================*/
 
-    annulerTimerChoix() {
+    afficherBoutonChoix(
+        choixDisponibles
+    ) {
 
-        if (!this.timerChoix) {
+        this.supprimerBoutonChoix();
+
+
+        if (
+            !Array.isArray(
+                choixDisponibles
+            ) ||
+            choixDisponibles.length === 0
+        ) {
 
             return;
 
         }
 
-        clearTimeout(
-            this.timerChoix
+
+        const conteneur =
+            document.getElementById(
+                "texte"
+            );
+
+
+        if (!conteneur) {
+
+            console.error(
+                "Impossible d'afficher le bouton des choix : #texte introuvable."
+            );
+
+            return;
+
+        }
+
+
+        const zoneBouton =
+            document.createElement(
+                "div"
+            );
+
+
+        zoneBouton.className =
+            "zone-afficher-choix";
+
+
+        const bouton =
+            document.createElement(
+                "button"
+            );
+
+
+        bouton.type =
+            "button";
+
+
+        bouton.className =
+            "bouton-afficher-choix";
+
+
+        bouton.textContent =
+            "Afficher les choix";
+
+
+        bouton.setAttribute(
+            "aria-label",
+            "Afficher les choix disponibles"
         );
 
-        this.timerChoix =
+
+        bouton.addEventListener(
+            "click",
+            () => {
+
+                this.supprimerBoutonChoix();
+
+
+                if (
+                    typeof choixManager !==
+                        "undefined" &&
+                    typeof choixManager.afficher ===
+                        "function"
+                ) {
+
+                    choixManager.afficher(
+                        choixDisponibles
+                    );
+
+                }
+                else {
+
+                    console.error(
+                        "choixManager.afficher est introuvable."
+                    );
+
+                }
+
+            }
+        );
+
+
+        zoneBouton.appendChild(
+            bouton
+        );
+
+
+        conteneur.appendChild(
+            zoneBouton
+        );
+
+
+        this.boutonChoix =
+            zoneBouton;
+
+
+        if (
+            typeof dialogueManager !==
+                "undefined" &&
+            typeof dialogueManager.defiler ===
+                "function"
+        ) {
+
+            dialogueManager.defiler();
+
+        }
+
+    },
+
+
+    /*=====================================================
+        SUPPRIMER LE BOUTON DES CHOIX
+    =====================================================*/
+
+    supprimerBoutonChoix() {
+
+        if (
+            this.boutonChoix &&
+            this.boutonChoix.parentNode
+        ) {
+
+            this.boutonChoix.remove();
+
+        }
+
+
+        this.boutonChoix =
             null;
+
+
+        document
+            .querySelectorAll(
+                ".zone-afficher-choix"
+            )
+            .forEach(
+                element => {
+
+                    element.remove();
+
+                }
+            );
+
+    },
+
+
+    /*=====================================================
+        ANNULER L'ATTENTE DES CHOIX
+    =====================================================*/
+
+    annulerAttenteChoix() {
+
+        if (this.timerChoix) {
+
+            clearTimeout(
+                this.timerChoix
+            );
+
+            this.timerChoix =
+                null;
+
+        }
+
+
+        this.supprimerBoutonChoix();
 
     },
 
@@ -569,7 +902,9 @@ calculerDelaiLecture(scene) {
         TRAITER UN CHOIX
     =====================================================*/
 
-    traiterChoix(choix) {
+    traiterChoix(
+        choix
+    ) {
 
         if (!choix) {
 
@@ -577,38 +912,57 @@ calculerDelaiLecture(scene) {
 
         }
 
-        this.annulerTimerChoix();
+
+        this.annulerAttenteChoix();
 
 
         if (choix.verrouille) {
 
-            dialogueManager.notification(
+            if (
+                typeof dialogueManager !==
+                    "undefined" &&
+                typeof dialogueManager.notification ===
+                    "function"
+            ) {
 
-                choix.messageVerrouille ||
+                dialogueManager.notification(
 
-                "Ce choix n'est pas disponible."
+                    choix.messageVerrouille ||
 
-            );
+                    "Ce choix n'est pas disponible."
+
+                );
+
+            }
 
             return;
 
         }
 
 
-        /*
-            Message affiché dans la conversation.
-
-            Le bouton peut avoir un texte court,
-            tandis que la bulle peut être plus naturelle.
-        */
-
-        const messageAffiche =
+        let messageAffiche =
 
             choix.message?.texte ||
 
             choix.texte ||
 
             "";
+
+
+        if (
+            typeof dialogueManager !==
+                "undefined" &&
+            typeof dialogueManager.remplacerVariables ===
+                "function"
+        ) {
+
+            messageAffiche =
+                dialogueManager
+                    .remplacerVariables(
+                        messageAffiche
+                    );
+
+        }
 
 
         const personnage =
@@ -618,21 +972,30 @@ calculerDelaiLecture(scene) {
             "joueur";
 
 
-        dialogueManager.ajouterMessage(
+        if (
+            typeof dialogueManager !==
+                "undefined" &&
+            typeof dialogueManager.ajouterMessage ===
+                "function"
+        ) {
 
-            messageAffiche,
+            dialogueManager.ajouterMessage(
 
-            personnage
+                messageAffiche,
 
-        );
+                personnage
 
+            );
 
-        /* Son */
+        }
+
 
         if (
             choix.son &&
             typeof audioManager !==
-            "undefined"
+                "undefined" &&
+            typeof audioManager.jouerSon ===
+                "function"
         ) {
 
             audioManager.jouerSon(
@@ -646,63 +1009,86 @@ calculerDelaiLecture(scene) {
         }
 
 
-        /* Effet simple */
+        if (
+            typeof conditionsManager !==
+                "undefined"
+        ) {
 
-        conditionsManager
-            .appliquerEffet(
+            if (
+                typeof conditionsManager.appliquerEffet ===
+                    "function"
+            ) {
 
-                choix.effet,
+                conditionsManager.appliquerEffet(
 
-                this.joueur
-
-            );
-
-
-        /* Effets multiples */
-
-        conditionsManager
-            .appliquerEffets(
-
-                choix.effets,
-
-                this.joueur
-
-            );
-
-
-        /* Destination */
-
-        const destination =
-            conditionsManager
-                .resoudreDestination(
-
-                    choix,
+                    choix.effet,
 
                     this.joueur
 
                 );
 
+            }
+
+
+            if (
+                typeof conditionsManager.appliquerEffets ===
+                    "function"
+            ) {
+
+                conditionsManager.appliquerEffets(
+
+                    choix.effets,
+
+                    this.joueur
+
+                );
+
+            }
+
+        }
+
+
+        let destination =
+            choix.next || null;
+
+
+        if (
+            typeof conditionsManager !==
+                "undefined" &&
+            typeof conditionsManager.resoudreDestination ===
+                "function"
+        ) {
+
+            destination =
+                conditionsManager
+                    .resoudreDestination(
+
+                        choix,
+
+                        this.joueur
+
+                    );
+
+        }
+
 
         this.sauvegarder();
 
 
-        /*
-            Petit délai pour laisser la bulle
-            du joueur apparaître avant la suite.
-        */
+        setTimeout(
+            () => {
 
-        setTimeout(() => {
+                this.gererDestination(
+                    destination
+                );
 
-            this.gererDestination(
-                destination
-            );
-
-        }, 450);
+            },
+            800
+        );
 
     },
 
-
-    /*=====================================================
+        /*=====================================================
         GÉRER UNE DESTINATION
     =====================================================*/
 
@@ -722,22 +1108,20 @@ calculerDelaiLecture(scene) {
 
 
         if (
-            destination.startsWith(
-                "chapitre"
-            )
+            String(destination)
+                .startsWith(
+                    "chapitre"
+                )
         ) {
 
             const numero =
-
                 Number.parseInt(
 
-                    destination.replace(
-
-                        "chapitre",
-
-                        ""
-
-                    ),
+                    String(destination)
+                        .replace(
+                            "chapitre",
+                            ""
+                        ),
 
                     10
 
@@ -745,12 +1129,17 @@ calculerDelaiLecture(scene) {
 
 
             if (
-                Number.isNaN(numero)
+                Number.isNaN(
+                    numero
+                )
             ) {
 
                 this.afficherErreur(
+
                     "Destination invalide : " +
+
                     destination
+
                 );
 
                 return;
@@ -778,38 +1167,50 @@ calculerDelaiLecture(scene) {
         CHANGER DE CHAPITRE
     =====================================================*/
 
-    changerChapitre(numero) {
+    changerChapitre(
+        numero
+    ) {
 
         const chapitre =
             chapitresManager.obtenir(
                 numero
             );
 
+
         if (!chapitre) {
 
             this.afficherErreur(
+
                 "Chapitre introuvable : " +
+
                 (numero + 1)
+
             );
 
             return;
 
         }
 
-        this.annulerTimerChoix();
+
+        this.annulerAttenteChoix();
+
 
         this.chapitreActuel =
             numero;
 
+
         this.sceneActuelle =
             chapitre.debut;
+
 
         this.sauvegarder();
 
 
         if (
             typeof dialogueManager !==
-            "undefined"
+                "undefined" &&
+            typeof dialogueManager.vider ===
+                "function"
         ) {
 
             dialogueManager.vider();
@@ -819,7 +1220,10 @@ calculerDelaiLecture(scene) {
 
         if (
             typeof animationManager !==
-            "undefined"
+                "undefined" &&
+            typeof animationManager
+                .transitionVersNoir ===
+                "function"
         ) {
 
             animationManager
@@ -830,12 +1234,24 @@ calculerDelaiLecture(scene) {
                             numero
                         );
 
-                        setTimeout(() => {
 
-                            animationManager
-                                .sortirDuNoir();
+                        if (
+                            typeof animationManager
+                                .sortirDuNoir ===
+                                "function"
+                        ) {
 
-                        }, 150);
+                            setTimeout(
+                                () => {
+
+                                    animationManager
+                                        .sortirDuNoir();
+
+                                },
+                                150
+                            );
+
+                        }
 
                     }
                 );
@@ -853,14 +1269,17 @@ calculerDelaiLecture(scene) {
 
 
     /*=====================================================
-        AUDIO D'UNE SCÈNE
+        GÉRER L'AUDIO D'UNE SCÈNE
     =====================================================*/
 
-    gererAudioScene(scene) {
+    gererAudioScene(
+        scene
+    ) {
 
         if (
+            !scene ||
             typeof audioManager ===
-            "undefined"
+                "undefined"
         ) {
 
             return;
@@ -868,29 +1287,40 @@ calculerDelaiLecture(scene) {
         }
 
 
-        if (scene.musique) {
+        if (
+            scene.musique &&
+            typeof audioManager
+                .changerMusique ===
+                "function"
+        ) {
 
-            audioManager
-                .changerMusique(
-                    scene.musique
-                );
+            audioManager.changerMusique(
+                scene.musique
+            );
 
         }
 
 
-        if (scene.ambiance) {
+        if (
+            scene.ambiance &&
+            typeof audioManager
+                .jouerAmbiance ===
+                "function"
+        ) {
 
-            audioManager
-                .jouerAmbiance(
-                    scene.ambiance
-                );
+            audioManager.jouerAmbiance(
+                scene.ambiance
+            );
 
         }
 
 
         if (
             scene.arreterAmbiance ===
-            true
+                true &&
+            typeof audioManager
+                .arreterAmbiance ===
+                "function"
         ) {
 
             audioManager
@@ -899,7 +1329,12 @@ calculerDelaiLecture(scene) {
         }
 
 
-        if (scene.son) {
+        if (
+            scene.son &&
+            typeof audioManager
+                .jouerSon ===
+                "function"
+        ) {
 
             audioManager.jouerSon(
 
@@ -922,20 +1357,45 @@ calculerDelaiLecture(scene) {
         nomFin = "finNeutre"
     ) {
 
-        this.annulerTimerChoix();
+        this.annulerAttenteChoix();
 
 
-        const fins =
+        let fins = [];
 
-            JSON.parse(
 
-                localStorage.getItem(
+        try {
 
-                    "finsDebloquees"
+            fins =
+                JSON.parse(
 
-                ) || "[]"
+                    localStorage.getItem(
+                        "finsDebloquees"
+                    ) || "[]"
 
+                );
+
+        }
+        catch (erreur) {
+
+            console.warn(
+                "Impossible de lire les fins débloquées :",
+                erreur
             );
+
+            fins = [];
+
+        }
+
+
+        if (
+            !Array.isArray(
+                fins
+            )
+        ) {
+
+            fins = [];
+
+        }
 
 
         if (
@@ -967,22 +1427,41 @@ calculerDelaiLecture(scene) {
 
         if (
             typeof audioManager !==
-            "undefined"
+                "undefined"
         ) {
 
-            audioManager.fadeOut(
-                1200
-            );
+            if (
+                typeof audioManager.fadeOut ===
+                    "function"
+            ) {
 
-            audioManager
-                .arreterAmbiance();
+                audioManager.fadeOut(
+                    1200
+                );
+
+            }
+
+
+            if (
+                typeof audioManager
+                    .arreterAmbiance ===
+                    "function"
+            ) {
+
+                audioManager
+                    .arreterAmbiance();
+
+            }
 
         }
 
 
         if (
             typeof animationManager !==
-            "undefined"
+                "undefined" &&
+            typeof animationManager
+                .transitionVersNoir ===
+                "function"
         ) {
 
             animationManager
@@ -1010,19 +1489,23 @@ calculerDelaiLecture(scene) {
         AFFICHER UNE ERREUR
     =====================================================*/
 
-    afficherErreur(message) {
+    afficherErreur(
+        message
+    ) {
 
         console.error(
             message
         );
 
-        this.annulerTimerChoix();
+
+        this.annulerAttenteChoix();
 
 
         const texte =
             document.getElementById(
                 "texte"
             );
+
 
         const choix =
             document.getElementById(
@@ -1038,7 +1521,7 @@ calculerDelaiLecture(scene) {
 
                     <div class="bulle">
 
-                        ${message}
+                        ${String(message)}
 
                     </div>
 
@@ -1049,14 +1532,18 @@ calculerDelaiLecture(scene) {
 
         if (choix) {
 
-            choix.innerHTML = "";
+            choix.innerHTML =
+                "";
 
         }
 
 
         if (
             typeof choixManager !==
-            "undefined"
+                "undefined" &&
+            typeof choixManager
+                .fermerPopup ===
+                "function"
         ) {
 
             choixManager
