@@ -1,287 +1,759 @@
-/*=====================================================
+"use strict";
+
+/*=========================================================
     FRIENDZONÉ REBORN
     menu.js
-=====================================================*/
+=========================================================*/
 
-const menuManager = {
+document.addEventListener(
+    "DOMContentLoaded",
+    () => {
 
-    initialiser() {
+        /*=================================================
+            ÉLÉMENTS DU MENU
+        =================================================*/
 
-        this.initialiserBoutons();
-        this.verifierSauvegarde();
-        this.lancerMusique();
+        const transition =
+            document.getElementById(
+                "transition"
+            );
 
-    },
+        const musiquemenu =
+            document.getElementById(
+                "musiquemenu"
+            );
 
+        const boutonNouvellePartie =
+            document.getElementById(
+                "nouvellePartie"
+            );
 
+        const boutonContinuer =
+            document.getElementById(
+                "continuer"
+            );
 
-    //==================================================
-    // Musique du menu
-    //==================================================
+        const boutonCharger =
+            document.getElementById(
+                "charger"
+            );
 
-    lancerMusique() {
+        const boutonGalerie =
+            document.getElementById(
+                "galerie"
+            );
 
-        if (typeof audioManager !== "undefined") {
+        const boutonSucces =
+            document.getElementById(
+                "succes"
+            );
 
-            audioManager.fadeIn("menu");
+        const boutonParametres =
+            document.getElementById(
+                "parametres"
+            );
 
-        }
+        const boutonCredits =
+            document.getElementById(
+                "credits"
+            );
 
-    },
-
-
-
-    //==================================================
-    // Vérifie la sauvegarde
-    //==================================================
-
-    verifierSauvegarde() {
-
-        const sauvegarde = localStorage.getItem("save");
-
-        const continuer = document.getElementById("continuer");
-        const charger = document.getElementById("charger");
-
-        if (!sauvegarde) {
-
-            continuer.disabled = true;
-            charger.disabled = true;
-
-            continuer.classList.add("disabled");
-            charger.classList.add("disabled");
-
-        }
-
-    },
-
-
-
-    //==================================================
-    // Boutons
-    //==================================================
-
-    initialiserBoutons() {
-
-        document
-            .getElementById("nouvellePartie")
-            ?.addEventListener("click", this.nouvellePartie);
-
-        document
-            .getElementById("continuer")
-            ?.addEventListener("click", this.continuer);
-
-        document
-            .getElementById("charger")
-            ?.addEventListener("click", this.charger);
-
-        document
-            .getElementById("galerie")
-            ?.addEventListener("click", () => {
-
-                this.ouvrirPopup("fenetreGalerie");
-
-            });
-
-        document
-            .getElementById("succes")
-            ?.addEventListener("click", () => {
-
-                this.ouvrirPopup("fenetreSucces");
-
-            });
-
-        document
-            .getElementById("parametres")
-            ?.addEventListener("click", () => {
-
-                this.ouvrirPopup("fenetreParametres");
-
-            });
-
-        document
-            .getElementById("credits")
-            ?.addEventListener("click", () => {
-
-                this.ouvrirPopup("fenetreCredits");
-
-            });
-
-        document
-            .getElementById("quitter")
-            ?.addEventListener("click", this.quitter);
-
-    },
+        const boutonQuitter =
+            document.getElementById(
+                "quitter"
+            );
 
 
+        let transitionEnCours =
+            false;
 
-    //==================================================
-    // Nouvelle partie
-    //==================================================
 
-    nouvellePartie() {
+        /*=================================================
+            CLÉS UTILISÉES PAR LE MENU
+        =================================================*/
 
-        if (!confirm("Commencer une nouvelle partie ?"))
-            return;
+        const CLE_NOUVELLE_PARTIE =
+            "nouvellePartieDemandee";
 
-        localStorage.removeItem("save");
 
-        const sauvegarde = {
+        /*
+            Plusieurs anciens noms possibles
+            pour rester compatible avec les
+            versions précédentes du projet.
+        */
 
-            chapitre: 0,
-            scene: "intro",
-
-            joueur: {
-
-                relationEva: 0,
-                confianceEva: 0,
-
-                relationEmelyne: 0,
-                relationZoe: 0,
-
-                gentillesse: 0,
-
-                rencontreEva: 0,
-                rencontreEmelyne: 0,
-                rencontreZoe: 0
-
-            }
-
-        };
-
-        localStorage.setItem(
+        const CLES_SAUVEGARDE_POSSIBLES = [
 
             "save",
 
-            JSON.stringify(sauvegarde)
+            "sauvegarde",
 
+            "friendzoneRebornSave",
+
+            "friendzoneRebornSauvegarde",
+
+            "friendzone_reborn_save"
+
+        ];
+
+
+        /*=================================================
+            VÉRIFIER UNE SAUVEGARDE
+        =================================================*/
+
+        function sauvegardeExiste() {
+
+            return CLES_SAUVEGARDE_POSSIBLES
+                .some(
+                    cle => {
+
+                        const valeur =
+                            localStorage.getItem(
+                                cle
+                            );
+
+                        return (
+                            valeur !== null &&
+                            valeur !== ""
+                        );
+
+                    }
+                );
+
+        }
+
+
+        function actualiserBoutonsSauvegarde() {
+
+            const existe =
+                sauvegardeExiste();
+
+
+            if (boutonContinuer) {
+
+                boutonContinuer.style.display =
+                    existe
+                        ? ""
+                        : "none";
+
+                boutonContinuer.disabled =
+                    !existe;
+
+            }
+
+
+            if (boutonCharger) {
+
+                boutonCharger.style.display =
+                    existe
+                        ? ""
+                        : "none";
+
+                boutonCharger.disabled =
+                    !existe;
+
+            }
+
+        }
+
+
+        /*=================================================
+            MUSIQUE DU MENU
+        =================================================*/
+
+        function initialiserMusique() {
+
+            if (!musiquemenu) {
+
+                console.warn(
+                    "menu.js : l'élément #musiquemenu est introuvable."
+                );
+
+                return;
+
+            }
+
+            musiquemenu.loop =
+                true;
+
+            musiquemenu.volume =
+                0.4;
+
+
+            /*
+                Les navigateurs bloquent souvent
+                la lecture automatique.
+            */
+
+            musiquemenu
+                .play()
+                .catch(
+                    () => {
+
+                        console.log(
+                            "Le navigateur attend une interaction avant de lancer la musique."
+                        );
+
+                    }
+                );
+
+        }
+
+
+        function demarrerMusiqueApresInteraction() {
+
+            if (!musiquemenu) {
+
+                return;
+
+            }
+
+            if (!musiquemenu.paused) {
+
+                return;
+
+            }
+
+            musiquemenu
+                .play()
+                .catch(
+                    erreur => {
+
+                        console.warn(
+                            "Impossible de lancer la musique du menu :",
+                            erreur
+                        );
+
+                    }
+                );
+
+        }
+
+
+        /*
+            Le premier clic sur la page permet
+            de lancer la musique si le navigateur
+            l'avait bloquée.
+        */
+
+        document.addEventListener(
+            "click",
+            demarrerMusiqueApresInteraction,
+            {
+                once: true
+            }
         );
 
-        menuManager.transitionJeu();
 
-    },
+        /*=================================================
+            FONDU DE LA MUSIQUE
+        =================================================*/
+
+        function fadeOutMusique(
+            duree = 1200
+        ) {
+
+            if (!musiquemenu) {
+
+                return;
+
+            }
+
+            const intervalle =
+                40;
+
+            const volumeDepart =
+                musiquemenu.volume;
+
+            const nombreEtapes =
+                Math.max(
+                    1,
+                    duree / intervalle
+                );
+
+            const diminution =
+                volumeDepart /
+                nombreEtapes;
+
+            let volume =
+                volumeDepart;
 
 
+            const fade =
+                setInterval(
+                    () => {
 
-    //==================================================
-    // Continuer
-    //==================================================
-
-    continuer() {
-
-        menuManager.transitionJeu();
-
-    },
+                        volume -=
+                            diminution;
 
 
+                        if (volume <= 0) {
 
-    //==================================================
-    // Charger
-    //==================================================
+                            volume = 0;
 
-    charger() {
+                            clearInterval(
+                                fade
+                            );
 
-        alert("Les sauvegardes multiples arriveront dans une prochaine version.");
+                            musiquemenu.pause();
 
-    },
+                            musiqueMenu.currentTime =
+                                0;
+
+                        }
 
 
+                        musiquemenu.volume =
+                            Math.max(
+                                0,
+                                volume
+                            );
 
-    //==================================================
-    // Transition
-    //==================================================
-
-    transitionJeu() {
-
-        if (typeof audioManager !== "undefined") {
-
-            audioManager.fadeOut(1200);
+                    },
+                    intervalle
+                );
 
         }
 
-        if (typeof animationManager !== "undefined") {
 
-            animationManager.transitionVersNoir(() => {
+        /*=================================================
+            LANCER LE JEU
+        =================================================*/
 
-                window.location.href = "jeu.html";
+        function lancerJeu() {
 
-            });
+            if (transitionEnCours) {
+
+                return;
+
+            }
+
+            transitionEnCours =
+                true;
+
+
+            fadeOutMusique(
+                1200
+            );
+
+
+            if (transition) {
+
+                transition.classList.add(
+                    "actif"
+                );
+
+            }
+
+
+            setTimeout(
+                () => {
+
+                    window.location.href =
+                        "jeu.html";
+
+                },
+                1200
+            );
 
         }
 
-        else {
 
-            setTimeout(() => {
+        /*=================================================
+            NOUVELLE PARTIE
+        =================================================*/
 
-                window.location.href = "jeu.html";
+        function demanderNouvellePartie() {
 
-            }, 1200);
+            const confirmation =
+                window.confirm(
+                    "Commencer une nouvelle partie ? La progression actuelle sera remplacée."
+                );
+
+            if (!confirmation) {
+
+                return;
+
+            }
+
+
+            /*
+                On ne crée aucune sauvegarde ici.
+
+                Cette information indique simplement
+                à moteur.js qu'il doit appeler
+                nouvellePartie(), demander le prénom
+                puis créer la vraie sauvegarde.
+            */
+
+            localStorage.setItem(
+                CLE_NOUVELLE_PARTIE,
+                "true"
+            );
+
+
+            lancerJeu();
 
         }
 
-    },
+
+        /*=================================================
+            CONTINUER
+        =================================================*/
+
+        function continuerPartie() {
+
+            if (!sauvegardeExiste()) {
+
+                window.alert(
+                    "Aucune sauvegarde n'est disponible."
+                );
+
+                actualiserBoutonsSauvegarde();
+
+                return;
+
+            }
 
 
+            /*
+                S'assure que le moteur ne considère
+                pas cette action comme une nouvelle partie.
+            */
 
-    //==================================================
-    // Popups
-    //==================================================
+            localStorage.removeItem(
+                CLE_NOUVELLE_PARTIE
+            );
 
-    ouvrirPopup(id) {
+
+            lancerJeu();
+
+        }
+
+
+        /*=================================================
+            CHARGER
+        =================================================*/
+
+        function chargerSauvegarde() {
+
+            if (!sauvegardeExiste()) {
+
+                window.alert(
+                    "Aucune sauvegarde n'est disponible."
+                );
+
+                return;
+
+            }
+
+
+            window.alert(
+                "Le système de plusieurs sauvegardes sera disponible prochainement."
+            );
+
+        }
+
+
+        /*=================================================
+            POPUPS
+        =================================================*/
+
+        function ouvrirPopup(id) {
+
+            const popup =
+                document.getElementById(
+                    id
+                );
+
+            if (!popup) {
+
+                console.warn(
+                    `menu.js : popup introuvable : ${id}`
+                );
+
+                return;
+
+            }
+
+            popup.style.display =
+                "flex";
+
+            popup.classList.add(
+                "ouverte"
+            );
+
+            popup.setAttribute(
+                "aria-hidden",
+                "false"
+            );
+
+        }
+
+
+        function fermerPopup(popup) {
+
+            if (!popup) {
+
+                return;
+
+            }
+
+            popup.style.display =
+                "none";
+
+            popup.classList.remove(
+                "ouverte"
+            );
+
+            popup.setAttribute(
+                "aria-hidden",
+                "true"
+            );
+
+        }
+
+
+        function fermerToutesLesPopups() {
+
+            document
+                .querySelectorAll(
+                    ".popup"
+                )
+                .forEach(
+                    popup => {
+
+                        fermerPopup(
+                            popup
+                        );
+
+                    }
+                );
+
+        }
+
+
+        /*
+            Rend la fonction accessible aux boutons
+            HTML utilisant onclick="fermerPopup()".
+        */
+
+        window.fermerPopup =
+            fermerToutesLesPopups;
+
+
+        /*
+            Fermer une popup en cliquant
+            sur son arrière-plan.
+        */
 
         document
-            .getElementById(id)
-            ?.classList.add("ouverte");
+            .querySelectorAll(
+                ".popup"
+            )
+            .forEach(
+                popup => {
 
-    },
+                    popup.addEventListener(
+                        "click",
+                        event => {
+
+                            if (
+                                event.target ===
+                                popup
+                            ) {
+
+                                fermerPopup(
+                                    popup
+                                );
+
+                            }
+
+                        }
+                    );
+
+                }
+            );
 
 
+        /*
+            Fermer avec la touche Échap.
+        */
 
-    fermerPopup() {
+        document.addEventListener(
+            "keydown",
+            event => {
 
-        document
+                if (
+                    event.key ===
+                    "Escape"
+                ) {
 
-            .querySelectorAll(".popup")
+                    fermerToutesLesPopups();
 
-            .forEach(popup => {
+                }
 
-                popup.classList.remove("ouverte");
-
-            });
-
-    },
+            }
+        );
 
 
+        /*=================================================
+            ÉVÉNEMENTS DES BOUTONS
+        =================================================*/
 
-    //==================================================
-    // Quitter
-    //==================================================
+        if (boutonNouvellePartie) {
 
-    quitter() {
-
-        if (confirm("Quitter le jeu ?")) {
-
-            window.close();
+            boutonNouvellePartie
+                .addEventListener(
+                    "click",
+                    demanderNouvellePartie
+                );
 
         }
+
+
+        if (boutonContinuer) {
+
+            boutonContinuer
+                .addEventListener(
+                    "click",
+                    continuerPartie
+                );
+
+        }
+
+
+        if (boutonCharger) {
+
+            boutonCharger
+                .addEventListener(
+                    "click",
+                    chargerSauvegarde
+                );
+
+        }
+
+
+        if (boutonGalerie) {
+
+            boutonGalerie
+                .addEventListener(
+                    "click",
+                    () => {
+
+                        ouvrirPopup(
+                            "fenetreGalerie"
+                        );
+
+                    }
+                );
+
+        }
+
+
+        if (boutonSucces) {
+
+            boutonSucces
+                .addEventListener(
+                    "click",
+                    () => {
+
+                        ouvrirPopup(
+                            "fenetreSucces"
+                        );
+
+                    }
+                );
+
+        }
+
+
+        if (boutonParametres) {
+
+            boutonParametres
+                .addEventListener(
+                    "click",
+                    () => {
+
+                        ouvrirPopup(
+                            "fenetreParametres"
+                        );
+
+                    }
+                );
+
+        }
+
+
+        if (boutonCredits) {
+
+            boutonCredits
+                .addEventListener(
+                    "click",
+                    () => {
+
+                        ouvrirPopup(
+                            "fenetreCredits"
+                        );
+
+                    }
+                );
+
+        }
+
+
+        if (boutonQuitter) {
+
+            boutonQuitter
+                .addEventListener(
+                    "click",
+                    () => {
+
+                        const confirmation =
+                            window.confirm(
+                                "Quitter le jeu ?"
+                            );
+
+                        if (!confirmation) {
+
+                            return;
+
+                        }
+
+
+                        /*
+                            window.close() ne fonctionne
+                            que si la fenêtre a été ouverte
+                            par JavaScript.
+                        */
+
+                        window.close();
+
+
+                        setTimeout(
+                            () => {
+
+                                window.alert(
+                                    "Le navigateur empêche la fermeture automatique. Tu peux fermer cet onglet manuellement."
+                                );
+
+                            },
+                            150
+                        );
+
+                    }
+                );
+
+        }
+
+
+        /*=================================================
+            INITIALISATION
+        =================================================*/
+
+        actualiserBoutonsSauvegarde();
+
+        initialiserMusique();
 
     }
-
-};
-
-
-
-window.addEventListener("load", () => {
-
-    menuManager.initialiser();
-
-});
-
-
-
-// Fonction utilisée par les boutons Fermer des popups
-
-function fermerPopup() {
-
-    menuManager.fermerPopup();
-
-}
+);
