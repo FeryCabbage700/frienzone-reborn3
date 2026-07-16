@@ -408,7 +408,7 @@
             "dialogues": [
                 {
                     "personnage": "narrateur",
-                    "texte": "Émelyne te conduit dans le bâtiment principal."
+                    "texte": "Émelyne conduit {{nomJoueur}} dans le bâtiment principal."
                 },
                 {
                     "personnage": "emelyne",
