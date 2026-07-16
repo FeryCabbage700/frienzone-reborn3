@@ -1,0 +1,27 @@
+"chapitreBientotDisponible":{
+    "dialogues": [
+        {
+            "personnage": "systeme",
+            "texte": "🎉 Félicitations ! Tu as terminé tout le contenu actuellement disponible."
+        },
+        {
+            "personnage": "systeme",
+            "texte": "Le chapitre 7 est en cours d'écriture."
+        },
+        {
+            "personnage": "systeme",
+            "texte": "De nouveaux dialogues, choix et conséquences arriveront prochainement."
+        },
+        {
+            "personnage": "systeme",
+            "texte": "Merci de suivre le développement de Friendzoné Reborn ❤️"
+        }
+    ],
+
+    "choix": [
+        {
+            "texte": "Retourner au menu",
+            "next": "menuPrincipal"
+        }
+    ]
+}
