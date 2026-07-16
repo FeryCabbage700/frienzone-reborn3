@@ -466,7 +466,12 @@
                 {
                     "personnage": "narrateur",
                     "texte": "Elle répond avec sérieux, comme si connaître parfaitement l'école était quelque chose de naturel."
-                }
+                },
+                {
+                    "personnage": "systeme",
+                    "texte": "Nouvelle information : Émelyne aime venir au CDI pour travailler dans le calme."
+                 }
+                 }
             ],
 
             "choix": [
