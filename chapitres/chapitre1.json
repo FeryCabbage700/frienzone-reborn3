@@ -86,7 +86,7 @@
                 },
                 {
                     "personnage": "zoe",
-                    "texte": "Oups... Je crois que j'ai encore fait une bêtise.
+                    "texte": "Oh non... Je suis vraiment désolée !"
                 },
                 {
                     "personnage": "narrateur",
@@ -408,7 +408,7 @@
             "dialogues": [
                 {
                     "personnage": "narrateur",
-                    "texte": "Émelyne conduit {{nomJoueur}} dans le bâtiment principal."
+                    "texte": "Émelyne te conduit dans le bâtiment principal."
                 },
                 {
                     "personnage": "emelyne",
@@ -466,12 +466,7 @@
                 {
                     "personnage": "narrateur",
                     "texte": "Elle répond avec sérieux, comme si connaître parfaitement l'école était quelque chose de naturel."
-                },
-                {
-                    "personnage": "systeme",
-                    "texte": "Nouvelle information : Émelyne aime venir au CDI pour travailler dans le calme."
-                 }
-                 }
+                }
             ],
 
             "choix": [
@@ -754,7 +749,7 @@
                 },
                 {
                     "personnage": "narrateur",
-                    "texte": "En revanche, cette première journée lui a permis de faire la connaissance d'Émelyne."
+                    "texte": "En revanche, cette première journée t'a permis de faire la connaissance d'Émelyne."
                 }
             ],
 
