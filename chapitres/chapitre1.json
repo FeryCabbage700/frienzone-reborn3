@@ -468,7 +468,7 @@
                     "texte": "Elle répond avec sérieux, comme si connaître parfaitement l'école était quelque chose de naturel."
                 },
                 {
-                    "personnage":"système",
+                    "personnage":"systeme",
                     "texte":"Nouvelle information : émelyne aime savoir où se trouvent les choses."
                 }
             ],
@@ -550,6 +550,10 @@
                 {
                     "personnage": "narrateur",
                     "texte": "{{nomJoueur}} comprends qu'Émelyne préfère les endroits calmes."
+                },
+                {
+                    "personnage":"systeme",
+                    "texte":"Nouvelle information:émelyne aime les endroit calme."
                 }
             ],
 
