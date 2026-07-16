@@ -466,6 +466,10 @@
                 {
                     "personnage": "narrateur",
                     "texte": "Elle répond avec sérieux, comme si connaître parfaitement l'école était quelque chose de naturel."
+                },
+                {
+                    "personnage":"système",
+                    "texte":"Nouvelle information : émelyne aime savoir où se trouvent les choses."
                 }
             ],
 
